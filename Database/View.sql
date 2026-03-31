@@ -68,16 +68,16 @@ select * from viewMonthlySalesReport
 go
 
 -- View lọc danh sách hàng sắp hết < 10 sản phẩm
-create view viewLowStockQuantityAlert
+create or alter view viewLowStockQuantityAlert
 as
 select
 	p.ProductID, p.ProductName, p.StockQuantity,
 	wh.WarehouseName,
-	sp.SupplierName, sp.Phone as SupplierPhone
+	sp.SupplierName, sp.Phone as SupplierPhone,
+	dbo.funcGetProductStatus(p.ProductID) as ProductStatus
 from Product p
 inner join Warehouse wh on p.WarehouseID = wh.WarehouseID
 inner join Supplier sp on sp.SupplierID = p.SupplierID
-where p.StockQuantity < 10
 go
 
 select * from viewLowStockQuantityAlert
