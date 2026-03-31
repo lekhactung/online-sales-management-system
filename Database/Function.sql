@@ -1,4 +1,7 @@
-﻿-- Tính tổng tiền sau thuế (VAT)
+﻿use OnlineSales
+go
+
+-- Tính tổng tiền sau thuế (VAT)
 create function funcCalculateTotalWithVAT(
 	@Amount DECIMAL(18, 2),
 	@VAT int
