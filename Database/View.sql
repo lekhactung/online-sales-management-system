@@ -99,3 +99,26 @@ go
 select * from viewShippingStatusSummary
 go
 
+-- Chi tiết trạng thái kho và nhà cung cấp
+create view viewInventoryReport
+as
+select
+	p.ProductID, 
+    p.ProductName, 
+    p.StockQuantity,
+    c.CategoryName,
+    s.SupplierName,
+    w.WarehouseName,
+	CASE 
+        WHEN p.StockQuantity = 0 THEN N'Hết hàng'
+        WHEN p.StockQuantity <= 5 THEN N'Cần nhập gấp'
+        ELSE N'Bình thường'
+    END AS StockStatus
+from Product p
+LEFT JOIN ProductCategory c ON p.CategoryID = c.CategoryID
+LEFT JOIN Supplier s ON p.SupplierID = s.SupplierID
+LEFT JOIN Warehouse w ON p.WarehouseID = w.WarehouseID
+go
+
+select * from viewInventoryReport
+go
