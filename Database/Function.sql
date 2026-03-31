@@ -2,13 +2,13 @@
 go
 
 -- Tính tổng tiền sau thuế (VAT)
-create function funcCalculateTotalWithVAT(
+create or alter function funcCalculateTotalWithVAT(
 	@Amount DECIMAL(18, 2),
 	@VAT int
 ) returns decimal(18, 2)
 as
 begin
-	return @Amount + (@Amount + @VAT / 100)
+	return @Amount *(1 + @VAT / 100.0)
 end
 go
 
