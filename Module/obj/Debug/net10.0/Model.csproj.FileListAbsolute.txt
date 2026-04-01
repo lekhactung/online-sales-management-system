@@ -1,0 +1,11 @@
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\Module\obj\Debug\net10.0\Model.GeneratedMSBuildEditorConfig.editorconfig
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\Module\obj\Debug\net10.0\Model.AssemblyInfoInputs.cache
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\Module\obj\Debug\net10.0\Model.AssemblyInfo.cs
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\Module\obj\Debug\net10.0\Model.csproj.CoreCompileInputs.cache
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\Module\bin\Debug\net10.0\Model.deps.json
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\Module\bin\Debug\net10.0\Model.dll
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\Module\bin\Debug\net10.0\Model.pdb
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\Module\obj\Debug\net10.0\Model.dll
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\Module\obj\Debug\net10.0\refint\Model.dll
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\Module\obj\Debug\net10.0\Model.pdb
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\Module\obj\Debug\net10.0\ref\Model.dll

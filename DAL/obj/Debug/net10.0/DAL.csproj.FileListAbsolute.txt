@@ -1,0 +1,17 @@
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\DAL\obj\Debug\net10.0\DAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\DAL\obj\Debug\net10.0\DAL.AssemblyInfoInputs.cache
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\DAL\obj\Debug\net10.0\DAL.AssemblyInfo.cs
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\DAL\obj\Debug\net10.0\DAL.csproj.CoreCompileInputs.cache
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\DAL\bin\Debug\net10.0\DAL.deps.json
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\DAL\bin\Debug\net10.0\DAL.dll
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\DAL\bin\Debug\net10.0\DAL.pdb
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\DAL\bin\Debug\net10.0\Model.dll
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\DAL\bin\Debug\net10.0\Model.pdb
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\DAL\obj\Debug\net10.0\DAL.csproj.AssemblyReference.cache
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\DAL\obj\Debug\net10.0\DAL.csproj.Up2Date
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\DAL\obj\Debug\net10.0\DAL.dll
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\DAL\obj\Debug\net10.0\refint\DAL.dll
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\DAL\obj\Debug\net10.0\DAL.pdb
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\DAL\obj\Debug\net10.0\ref\DAL.dll
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\DAL\bin\Debug\net10.0\DAL.runtimeconfig.json
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\DAL\obj\Debug\net10.0\DAL.genruntimeconfig.cache
