@@ -13,3 +13,23 @@ API/bin/
 BLL/bin/
 DAL/bin/
 Model/bin/
+
+# Visual Studio
+.vs/
+bin/
+obj/
+
+# .NET
+*.user
+*.suo
+*.cache
+*.dll
+*.exe
+
+# Angular
+node_modules/
+dist/
+.angular/
+
+# Node.js
+package-lock.json
