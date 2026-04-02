@@ -3,3 +3,4 @@
 .App
 .http
 Database/
+.cache
