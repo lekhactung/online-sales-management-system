@@ -1,0 +1,24 @@
+<!-- order-list.html -->
+<div class="container mt-4">
+  <h2>Danh Sach Don Hang</h2>
+  <div *ngIf="isLoading" class="text-center"><div class="spinner-border"></div></div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  <table *ngIf="!isLoading" class="table table-hover table-bordered">
+    <thead class="table-dark">
+      <tr><th>ID</th><th>Ngay Dat</th><th>Khach Hang</th><th>Tong Tien</th><th>Trang Thai</th></tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let o of orders">
+        <td>{{ o.OrderID }}</td>
+        <td>{{ o.OrderDate | date:'dd/MM/yyyy' }}</td>
+        <td>{{ o.CustomerName }}</td>
+        <td>{{ o.TotalAmount | number:'1.0-0' }} d</td>
+        <td>
+          <span class="badge" [class]="(+o.StatusID) === 4 ? 'bg-success' : 'bg-warning'">
+            {{ o.StatusName }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

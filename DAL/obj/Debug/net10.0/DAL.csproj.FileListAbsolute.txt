@@ -15,3 +15,4 @@ D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\DAL\obj\Debug\net10.0\
 D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\DAL\obj\Debug\net10.0\ref\DAL.dll
 D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\DAL\bin\Debug\net10.0\DAL.runtimeconfig.json
 D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\DAL\obj\Debug\net10.0\DAL.genruntimeconfig.cache
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\DAL\obj\Debug\net10.0\DAL.sourcelink.json

@@ -9,3 +9,4 @@ D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\Module\obj\Debug\net10
 D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\Module\obj\Debug\net10.0\refint\Model.dll
 D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\Module\obj\Debug\net10.0\Model.pdb
 D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\Module\obj\Debug\net10.0\ref\Model.dll
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\Module\obj\Debug\net10.0\Model.sourcelink.json
