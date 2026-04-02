@@ -22,7 +22,7 @@ builder.Services.AddScoped<IProductServices, ProductServices>();
 builder.Services.AddControllers(options =>
 {
     // Cho phép trả XML khi client gửi Accept: application/xml
-    options.RespectBrowserAcceptHeader = true;
+    options.RespectBrowserAcceptHeader = false;
 })
 .AddJsonOptions(options =>
 {
@@ -39,6 +39,7 @@ builder.Services.AddCors(options =>
         policy.WithOrigins("http://localhost:4200")
               .AllowAnyHeader()
               .AllowAnyMethod());
+
 });
 
 // 5. SWAGGER — giao diện test API
@@ -52,7 +53,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(); // Truy cập tại /swagger
 }
-
+app.UseHttpsRedirection();
 app.UseCors("AllowAngular");  // Phải đặt TRƯỚC MapControllers
 app.UseAuthorization();
 app.MapControllers();

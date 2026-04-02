@@ -164,3 +164,4 @@ D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\api\bin\Debug\net10.0\
 D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\api\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\api\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\api\obj\Debug\net10.0\API.MvcApplicationPartsAssemblyInfo.cs
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\API\obj\Debug\net10.0\API.sourcelink.json

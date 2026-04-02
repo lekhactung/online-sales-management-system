@@ -15,3 +15,4 @@ D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\BLL\obj\Debug\net10.0\
 D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\BLL\obj\Debug\net10.0\refint\BLL.dll
 D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\BLL\obj\Debug\net10.0\BLL.pdb
 D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\BLL\obj\Debug\net10.0\ref\BLL.dll
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\BLL\obj\Debug\net10.0\BLL.sourcelink.json
