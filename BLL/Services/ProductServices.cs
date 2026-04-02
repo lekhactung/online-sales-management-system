@@ -1,4 +1,4 @@
-﻿using DAL.Repositories;
+using DAL.Repositories;
 using Model.DTOs;
 using Model.Entities;
 using OnlineShop.DAL.Repositories;
@@ -35,7 +35,7 @@ namespace BLL.Services
             };
         }
 
-        public async Task<ProductDto> CreateAsync(CreateProductDto dto)
+        public async Task<ProductDto?> CreateAsync(CreateProductDto dto)
         {
             if (dto.Price <= 0)
                 throw new ArgumentException("Giá phải lớn hơn 0");

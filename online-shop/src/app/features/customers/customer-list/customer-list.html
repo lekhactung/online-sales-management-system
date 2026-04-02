@@ -1,1 +1,114 @@
-<p>customer-list works!</p>
+<div class="premium-container">
+  
+  <!-- Header & Search Bar -->
+  <div class="header-section">
+    <div class="title-wrapper">
+      <h2 class="hero-title">Quản Lý Khách Hàng</h2>
+      <p class="subtitle">Tìm kiếm và rà soát thông tin liên lạc của các đối tác</p>
+    </div>
+
+    <!-- Glassmorphism Search Bar -->
+    <div class="search-glassmorphism">
+      <div class="search-input-group">
+        <select class="form-select custom-select" [(ngModel)]="searchType">
+          <option value="name">Tên Khách Hàng</option>
+          <option value="phone">Số Điện Thoại</option>
+        </select>
+        
+        <input 
+          type="text" 
+          class="form-control custom-input" 
+          placeholder="Nhập từ khóa tìm kiếm..." 
+          [(ngModel)]="searchQuery"
+          (keyup.enter)="searchCustomers()"
+        >
+        
+        <button class="btn btn-primary d-flex align-items-center gap-2 custom-btn" (click)="searchCustomers()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+          </svg>
+          Tra Cứu
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner-grow text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <div class="spinner-grow text-secondary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <div class="spinner-grow text-success" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Error Alert -->
+  <div *ngIf="error" class="alert custom-alert" role="alert">
+    <strong>Cảnh Báo!</strong> {{ error }}
+  </div>
+
+  <!-- Data Table -->
+  <div class="table-card" *ngIf="!isLoading">
+    <table class="table premium-table">
+      <thead>
+        <tr>
+          <th>Khách Hàng</th>
+          <th>Liên Hệ</th>
+          <th>Địa Chỉ</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Empty State -->
+        <tr *ngIf="customers.length === 0">
+          <td colspan="4" class="text-center py-5 empty-state">
+            <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" width="150" alt="Empty" />
+            <h5>Không tìm thấy kết quả phù hợp!</h5>
+          </td>
+        </tr>
+
+        <!-- Rows -->
+        <tr *ngFor="let c of customers" class="table-row">
+          <td>
+            <div class="d-flex align-items-center gap-3">
+              <!-- Avatar Circle -->
+              <div class="avatar-circle">
+                {{ getInitials(c.FirstName, c.LastName) }}
+              </div>
+              <div>
+                <h6 class="mb-0 fw-bold">{{ c.LastName }} {{ c.FirstName }}</h6>
+                <small class="text-muted">ID: <span class="badge bg-light text-dark shadow-sm">{{ c.CustomerId?.substring(0,8) }}...</span></small>
+              </div>
+            </div>
+          </td>
+          <td>
+             <div class="contact-info">
+               <div class="d-flex align-items-center gap-2 mb-1">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#6B7280" class="bi bi-telephone-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/></svg>
+                 <span class="text-dark fw-medium">{{ c.Phone || 'Chưa cập nhật' }}</span>
+               </div>
+               <div class="d-flex align-items-center gap-2">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#6B7280" class="bi bi-envelope-fill" viewBox="0 0 16 16"><path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"/></svg>
+                 <span class="text-muted small">{{ c.Email || 'Chưa cập nhật' }}</span>
+               </div>
+             </div>
+          </td>
+          <td>
+            <span class="address-badge">
+              {{ c.Address || 'Không có dữ liệu' }}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-outline-primary btn-sm rounded-pill action-btn hover-shadow">
+              Chi Tiết
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

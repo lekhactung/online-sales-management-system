@@ -5,7 +5,7 @@ import { Order } from '../../shared/models/order.model';
  
 @Injectable({ providedIn: 'root' })
 export class OrderService {
-  private endpoint = 'orders';
+  private endpoint = 'order';
  
   constructor(private api: ApiService) {}
  
@@ -21,7 +21,12 @@ export class OrderService {
     return this.api.post<Order>(this.endpoint, order);
   }
  
-  updateStatus(id: number, statusId: number): Observable<Order> {
+  updateStatus(id: string, statusId: string): Observable<Order> {
     return this.api.put<Order>(`${this.endpoint}/${id}/status`, { statusId });
+  }
+
+  // --- CÁC HÀM BỔ SUNG GẦN ĐÂY ---
+  getOrdersByCustomer(customerId: string): Observable<Order[]> {
+    return this.api.get<Order[]>(`${this.endpoint}/customer/${customerId}`);
   }
 }

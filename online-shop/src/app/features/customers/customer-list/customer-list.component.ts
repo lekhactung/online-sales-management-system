@@ -70,10 +70,7 @@ export class CustomerListComponent implements OnInit {
     }
   }
 
-  getInitials(firstName: any, lastName: any): string {
-    const f = firstName || '';
-    const l = lastName || '';
-    if (!f && !l) return 'KH'; // Khách Hàng
-    return `${l.charAt(0)}${f.charAt(0)}`.toUpperCase();
+  getInitials(firstName: string, lastName: string): string {
+    return `${lastName.charAt(0)}${firstName.charAt(0)}`.toUpperCase();
   }
 }

@@ -1,7 +1,7 @@
 
 // Interface tương ứng với ProductDto từ backend
 export interface Product {
-  ProductID: string;
+  ProductId: string;
   ProductName: string;
   Price: number;
   CategoryName?: string;

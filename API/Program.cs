@@ -24,6 +24,10 @@ builder.Services.AddScoped<ICustomerServices, CustomerServices>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderServices, OrderServices>();
 
+// Đăng ký danh mục khác (Mẫu cho ProductCategory)
+builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+builder.Services.AddScoped<IProductCategoryServices, ProductCategoryServices>();
+
 // 3. CONTROLLER + JSON + XML
 builder.Services.AddControllers(options =>
 {

@@ -27,15 +27,15 @@
     </thead>
     <tbody>
       <tr *ngFor="let p of filteredProducts">
-        <td>{{ p.ProductID }}</td>
+        <td>{{ p.ProductId }}</td>
         <td>{{ p.ProductName }}</td>
         <td>{{ p.Price | number:'1.0-0' }} d</td>
         <td>{{ p.CategoryName }}</td>
         <td>{{ p.StockQuantity }}</td>
         <td>
-          <a [routerLink]="['/products/edit', p.ProductID]"
+          <a [routerLink]="['/products/edit', p.ProductId]"
              class="btn btn-sm btn-warning me-1">Sua</a>
-          <button class="btn btn-sm btn-danger" (click)="delete(+p.ProductID)">Xoa</button>
+          <button class="btn btn-sm btn-danger" (click)="delete(p.ProductId)">Xoa</button>
         </td>
       </tr>
       <tr *ngIf="filteredProducts.length === 0">

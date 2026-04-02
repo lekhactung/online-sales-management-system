@@ -30,7 +30,7 @@ export class ProductService {
     return this.api.put<Product>(`${this.endpoint}/${id}`, dto);
   }
  
-  delete(id: number): Observable<void> {
+  delete(id: string): Observable<void> {
     return this.api.delete<void>(`${this.endpoint}/${id}`);
   }
  
