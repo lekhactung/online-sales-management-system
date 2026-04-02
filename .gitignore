@@ -4,3 +4,12 @@
 .http
 Database/
 .cache
+API/obj/
+BLL/obj/
+DAL/obj/
+Model/obj/
+online-shop/obj/
+API/bin/
+BLL/bin/
+DAL/bin/
+Model/bin/
