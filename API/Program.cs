@@ -1,4 +1,4 @@
-﻿
+
 using BLL.Services;
 using DAL.Data;
 using DAL.Data;
@@ -17,6 +17,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 //    .NET sẽ tự tạo instance khi nào cần
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductServices, ProductServices>();
+
+// Đăng ký cho Customer và Order
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ICustomerServices, CustomerServices>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderServices, OrderServices>();
 
 // 3. CONTROLLER + JSON + XML
 builder.Services.AddControllers(options =>
