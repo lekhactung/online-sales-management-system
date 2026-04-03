@@ -188,6 +188,7 @@ logout() { this.isLoggedIn = false; }
   }
   
   this.showModal = false; // Đóng Form sau khi lưu
+  // test change
 }
 
   deleteProduct(id: number) {
