@@ -52,6 +52,16 @@ create table Product(
 )
 go
 
+-- Admin
+create table Admin(
+	AdminID nvarchar(20) primary key,
+	LastName nvarchar(50),
+	FirstName nvarchar(50),
+	Phone nvarchar(15) unique,
+	Email nvarchar(50) unique
+)
+go
+
 
 -- Customer
 create table Customer(
@@ -60,10 +70,32 @@ create table Customer(
 	FirstName nvarchar(100),
 	Phone nvarchar(15) unique,
 	Email nvarchar(50) unique,
-	Address nvarchar(200)
+	Address nvarchar(200),
+	AdminID nvarchar(20),
+	
+	constraint FK_Customer_Admin foreign key (AdminID) REFERENCES Admin (AdminID)
 )
 go
 
+
+-- Account
+create table Account(
+	AccountID nvarchar(20) primary key,
+	Username nvarchar(20) not null,
+	Password nvarchar(20) not null,
+	Role nvarchar(20) CHECK (Role in ('Admin', 'Customer')),
+	
+	CustomerID nvarchar(20),
+	AdminID nvarchar(20),
+	constraint fk_account_customer foreign key (CustomerID) REFERENCES Customer (CustomerID),
+	constraint fk_account_admin foreign key (AdminID) REFERENCES Admin (AdminID),
+	constraint CHK_Account_Owner CHECK(
+		(Role = 'Customer' and CustomerID is not null and AdminID is not null)
+		OR
+		(Role = 'Admin' and AdminID is not null and CustomerID is not null)
+	)
+)
+go
 
 -- Order Status
 create table OrderStatus(
@@ -119,6 +151,9 @@ create table Shipping(
 	foreign key (OrderID) REFERENCES Orders(OrderID)
 )
 go
+
+
+
 
 -- Product Category
 insert into ProductCategory values
