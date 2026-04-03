@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
@@ -32,18 +32,35 @@ namespace DAL.Repositories
 
         public async Task<T> UpdateAsync(T entity)
         {
-            _dbSet.Update(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+            try 
+            {
+                _dbSet.Update(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[UPDATE ERROR]: {ex.Message}");
+                // Giữ cho API không sập, trả về entities không đổi. Hoặc throw.
+                return null!;
+            }
         }
 
         public async Task<bool> DeleteAsync(string id)
         {
-            var entity = await GetByIdAsync(id);
-            if (entity == null) return false;
-            _dbSet.Remove(entity);
-            await _context.SaveChangesAsync();
-            return true;
+            try
+            {
+                var entity = await GetByIdAsync(id);
+                if (entity == null) return false;
+                _dbSet.Remove(entity);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[DELETE ERROR]: {ex.InnerException?.Message ?? ex.Message}");
+                return false;
+            }
         }
     }
 }

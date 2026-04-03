@@ -57,7 +57,7 @@ namespace BLL.Services
             // 2. Tạo Order
             var order = new Order
             {
-                OrderId = Guid.NewGuid().ToString(),
+                OrderId = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(),
                 OrderDate = DateTime.Now,
                 CustomerId = createDto.CustomerId,
                 StatusId = "PENDING",

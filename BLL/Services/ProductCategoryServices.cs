@@ -32,7 +32,7 @@ namespace BLL.Services
         {
             var entity = new ProductCategory
             {
-                CategoryId = Guid.NewGuid().ToString(),
+                CategoryId = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(),
                 CategoryName = dto.CategoryName
             };
             await _repo.CreateAsync(entity);

@@ -52,7 +52,7 @@ namespace BLL.Services
         {
             var customer = new Customer
             {
-                CustomerId = Guid.NewGuid().ToString(),
+                CustomerId = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(),
                 LastName = createDto.LastName,
                 FirstName = createDto.FirstName,
                 Phone = createDto.Phone,

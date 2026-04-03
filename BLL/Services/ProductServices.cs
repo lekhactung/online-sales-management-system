@@ -43,7 +43,7 @@ namespace BLL.Services
             var entity = new Product
             {
                 // ⚠️ nếu DB không auto generate thì phải tự set ID
-                ProductId = Guid.NewGuid().ToString(),
+                ProductId = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(),
 
                 ProductName = dto.ProductName,
                 Price = dto.Price,
@@ -54,12 +54,31 @@ namespace BLL.Services
             };
 
             var created = await _repo.CreateAsync(entity);
-
             return new ProductDto
             {
                 ProductId = created.ProductId,
-                ProductName = created.ProductName
+                ProductName = created.ProductName,
+                Price = created.Price,
+                StockQuantity = created.StockQuantity,
+                CategoryName = created.Category?.CategoryName,
+                SupplierName = created.Supplier?.SupplierName
             };
+        }
+
+        public async Task<bool> UpdateAsync(string id, ProductDto dto)
+        {
+            var existing = await _repo.GetByIdAsync(id);
+            if (existing == null) return false;
+
+            existing.ProductName = dto.ProductName;
+            existing.Price = dto.Price;
+            existing.StockQuantity = dto.StockQuantity;
+            
+            // Nếu có cho phép cập nhật Category/Supplier ở DTO
+            // existing.CategoryId = dto.CategoryId;
+            
+            var updated = await _repo.UpdateAsync(existing);
+            return updated != null;
         }
 
         // ✅ đổi int -> string

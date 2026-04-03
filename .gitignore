@@ -1,23 +1,14 @@
-.vs/
-.json
-.App
+*.vs/
+*.json
+*.App
 .http
 Database/
-.cache
-API/obj/
-BLL/obj/
-DAL/obj/
-Model/obj/
-online-shop/obj/
-API/bin/
-BLL/bin/
-DAL/bin/
-Model/bin/
-
+*.cache
+*/obj
+*/bin
 # Visual Studio
 .vs/
 bin/
-obj/
 
 # .NET
 *.user
@@ -33,3 +24,7 @@ dist/
 
 # Node.js
 package-lock.json
+
+*.github
+*.tex
+*.pdf
