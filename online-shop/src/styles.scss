@@ -1,1 +1,41 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+  background-color: #0f172a !important; // Xanh đen đậm kiểu Dashboard
+  color: #e2e8f0 !important;
+  font-family: 'Inter', sans-serif;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: #1e293b;
+  border-radius: 8px;
+  overflow: hidden;
+
+  th {
+    background-color: #334155;
+    padding: 12px 15px;
+    text-align: left;
+    font-size: 13px;
+    text-transform: uppercase;
+    color: #94a3b8;
+  }
+
+  td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #334155;
+    font-size: 14px;
+    vertical-align: middle;
+  }
+
+  tr:hover {
+    background-color: #2d3748; // Di chuột vào dòng nào dòng đó sáng lên
+  }
+}
+
+.btn-action {
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-right: 5px;
+}
