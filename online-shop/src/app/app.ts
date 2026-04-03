@@ -189,6 +189,7 @@ logout() { this.isLoggedIn = false; }
   
   this.showModal = false; // Đóng Form sau khi lưu
   // test change
+  // test branch
 }
 
   deleteProduct(id: number) {
