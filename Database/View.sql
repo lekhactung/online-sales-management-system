@@ -53,7 +53,7 @@ select * from viewProductCategoryRevenue
 go
 
 -- View báo cáo doanh số theo tháng
-create view viewMonthlySalesReport
+create or alter view viewMonthlySalesReport
 as
 select
 	YEAR(OrderDate) as SalesYear,
@@ -100,7 +100,7 @@ select * from viewShippingStatusSummary
 go
 
 -- Chi tiết trạng thái kho và nhà cung cấp
-create view viewInventoryReport
+create or alter view viewInventoryReport
 as
 select
 	p.ProductID, 
