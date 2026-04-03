@@ -81,12 +81,12 @@ go
 -- Account
 create table Account(
 	AccountID nvarchar(20) primary key,
-	Username nvarchar(20) not null,
+	Username nvarchar(20) not null unique,
 	Password nvarchar(20) not null,
 	Role nvarchar(20) CHECK (Role in ('Admin', 'Customer')),
 	
 	CustomerID nvarchar(20),
-	AdminID nvarchar(20),
+	AdminID nvarchar(20) unique,
 	constraint fk_account_customer foreign key (CustomerID) REFERENCES Customer (CustomerID),
 	constraint fk_account_admin foreign key (AdminID) REFERENCES Admin (AdminID),
 	constraint CHK_Account_Owner CHECK(
