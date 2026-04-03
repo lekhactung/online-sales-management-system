@@ -1,5 +1,4 @@
 
-// Interface tương ứng với ProductDto từ backend
 export interface Product {
   ProductId: string;
   ProductName: string;
@@ -8,13 +7,12 @@ export interface Product {
   SupplierName?: string;
   StockQuantity: number;
 }
- 
-// Interface cho tạo mới sản phẩm
+
 export interface CreateProduct {
   ProductName: string;
   Price: number;
-  CategoryID: string;
-  SupplierID: string;
-  WarehouseID: string;
+  CategoryId: string;
+  SupplierId?: string;
+  WarehouseId?: string;
   StockQuantity: number;
 }

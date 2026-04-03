@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
@@ -7,10 +7,8 @@ namespace DAL.Data
 {
     public class AppDbContext : DbContext
     {
-        //constructor nhận config từ program.cs
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        //mỗi dbset = 1 bảng trong db
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Customer> Customers { get; set; }
@@ -20,6 +18,7 @@ namespace DAL.Data
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
         public DbSet<OrderStatus> OrderStatuses { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>().ToTable("Product");
@@ -31,11 +30,10 @@ namespace DAL.Data
             modelBuilder.Entity<Warehouse>().ToTable("Warehouse");
             modelBuilder.Entity<Shipping>().ToTable("Shipping");
             modelBuilder.Entity<OrderStatus>().ToTable("OrderStatus");
-            // Bảng OrderDetail có khóa chính kép
+
             modelBuilder.Entity<OrderDetail>()
                 .HasKey(od => new { od.OrderId, od.ProductId });
 
-            // Chỉ định kiểu decimal cho SQL
             modelBuilder.Entity<Product>()
                 .Property(p => p.Price)
                 .HasColumnType("decimal(18,2)");
@@ -43,10 +41,9 @@ namespace DAL.Data
             modelBuilder.Entity<Order>()
                 .Property(o => o.TotalAmount)
                 .HasColumnType("decimal(18,2)");
+
             modelBuilder.Entity<OrderDetail>()
                .HasKey(x => new { x.OrderId, x.ProductId });
         }
-
-
     }
 }

@@ -1,10 +1,9 @@
+// Khớp hoàn toàn với C# DTO: PropertyNamingPolicy = null (PascalCase)
 export interface ProductCategory {
-  categoryId: string;
-  categoryName: string;
-  description?: string;
+  CategoryId: string;
+  CategoryName: string;
 }
 
 export interface CreateProductCategory {
-  categoryName: string;
-  description?: string;
+  CategoryName: string;
 }

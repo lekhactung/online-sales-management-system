@@ -1,17 +1,17 @@
 export interface Order {
-  OrderID: string;
+  OrderId: string;
   OrderDate: string;
   TotalAmount: number;
-  CustomerID: string;
+  CustomerId: string;
   CustomerName?: string;
-  StatusID: string;
+  StatusId: string;
   StatusName?: string;
   OrderDetails?: OrderDetail[];
 }
- 
+
 export interface OrderDetail {
-  OrderID: string;
-  ProductID: string;
+  OrderId: string;
+  ProductId: string;
   ProductName?: string;
   Quantity: number;
   UnitPrice: number;

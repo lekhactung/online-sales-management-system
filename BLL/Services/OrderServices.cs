@@ -34,7 +34,6 @@ namespace BLL.Services
             decimal totalAmount = 0;
             var orderDetails = new List<OrderDetail>();
 
-            // 1. Kiểm tra tồn kho trước và tính thành tiền
             foreach (var item in createDto.OrderDetails)
             {
                 var product = await _productRepository.GetByIdAsync(item.ProductId);
@@ -54,7 +53,6 @@ namespace BLL.Services
                 });
             }
 
-            // 2. Tạo Order
             var order = new Order
             {
                 OrderId = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(),
@@ -65,7 +63,6 @@ namespace BLL.Services
                 OrderDetails = orderDetails
             };
 
-            // 3. Tiến hành trừ lùi tồn kho (Cập nhật Db)
             foreach (var item in createDto.OrderDetails)
             {
                 var product = await _productRepository.GetByIdAsync(item.ProductId);
@@ -76,7 +73,6 @@ namespace BLL.Services
                 }
             }
 
-            // 4. Lưu đơn hàng
             await _orderRepository.CreateAsync(order);
 
             return order.OrderId;

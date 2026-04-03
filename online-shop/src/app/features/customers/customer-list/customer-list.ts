@@ -13,7 +13,7 @@ import { Customer } from '../../../shared/models/customer.model';
 })
 export class CustomerListComponent implements OnInit {
   customers: Customer[] = [];
-  isLoading = false;
+  isLoading = true;
   error = '';
   searchQuery = '';
   searchType: 'name' | 'phone' = 'name';
@@ -31,8 +31,8 @@ export class CustomerListComponent implements OnInit {
         this.customers = data;
         this.isLoading = false;
       },
-      error: (err) => {
-        this.error = 'Không thể tải danh sách khách hàng. Máy chủ C# có đang chạy?';
+      error: () => {
+        this.error = 'Không thể tải danh sách khách hàng. Kiểm tra backend!';
         this.isLoading = false;
       }
     });
@@ -45,35 +45,26 @@ export class CustomerListComponent implements OnInit {
     }
 
     this.isLoading = true;
-    if (this.searchType === 'name') {
-      this.customerService.searchByName(this.searchQuery).subscribe({
-        next: (data) => {
-          this.customers = data;
-          this.isLoading = false;
-        },
-        error: () => {
-          this.error = 'Lỗi tìm kiếm theo tên';
-          this.isLoading = false;
-        }
-      });
-    } else {
-      this.customerService.searchByPhone(this.searchQuery).subscribe({
-        next: (data) => {
-          this.customers = data;
-          this.isLoading = false;
-        },
-        error: () => {
-          this.error = 'Lỗi tìm kiếm theo số điện thoại';
-          this.isLoading = false;
-        }
-      });
-    }
+    const obs = this.searchType === 'name'
+      ? this.customerService.searchByName(this.searchQuery)
+      : this.customerService.searchByPhone(this.searchQuery);
+
+    obs.subscribe({
+      next: (data) => {
+        this.customers = data;
+        this.isLoading = false;
+      },
+      error: () => {
+        this.error = 'Lỗi tìm kiếm';
+        this.isLoading = false;
+      }
+    });
   }
 
-  getInitials(firstName: any, lastName: any): string {
+  getInitials(firstName: string, lastName: string): string {
     const f = firstName || '';
     const l = lastName || '';
-    if (!f && !l) return 'KH'; // Khách Hàng
+    if (!f && !l) return 'KH';
     return `${l.charAt(0)}${f.charAt(0)}`.toUpperCase();
   }
 }

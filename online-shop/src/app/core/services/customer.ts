@@ -5,7 +5,7 @@ import { Customer, CreateCustomer } from '../../shared/models/customer.model';
 
 @Injectable({ providedIn: 'root' })
 export class CustomerService {
-  private endpoint = 'customer'; // Tương ứng CustomerController của C#
+  private endpoint = 'customer';
 
   constructor(private api: ApiService) {}
 
@@ -18,8 +18,6 @@ export class CustomerService {
   }
 
   create(dto: CreateCustomer): Observable<string> {
-    // API C# trả về chuỗi ID trực tiếp thay vì JSON Object, nên ta dùng HTTP thông thường nếu cần, 
-    // Tuy nhiên ở đây ApiService đang nhận T. Ta có thể lấy tạm as string.
     return this.api.post<string>(this.endpoint, dto);
   }
 
@@ -31,7 +29,6 @@ export class CustomerService {
     return this.api.delete<void>(`${this.endpoint}/${id}`);
   }
 
-  // --- CÁC HÀM MỚI BỔ SUNG GẦN ĐÂY ---
   searchByName(name: string): Observable<Customer[]> {
     return this.api.get<Customer[]>(`${this.endpoint}/search?name=${name}`);
   }

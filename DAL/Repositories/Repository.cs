@@ -14,7 +14,7 @@ namespace DAL.Repositories
         public Repository(AppDbContext context)
         {
             _context = context;
-            _dbSet = context.Set<T>(); // Lấy bảng tương ứng với T
+            _dbSet = context.Set<T>();
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()
@@ -32,7 +32,7 @@ namespace DAL.Repositories
 
         public async Task<T> UpdateAsync(T entity)
         {
-            try 
+            try
             {
                 _dbSet.Update(entity);
                 await _context.SaveChangesAsync();
@@ -40,8 +40,7 @@ namespace DAL.Repositories
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[UPDATE ERROR]: {ex.Message}");
-                // Giữ cho API không sập, trả về entities không đổi. Hoặc throw.
+                Console.WriteLine(ex.Message);
                 return null!;
             }
         }
@@ -58,7 +57,7 @@ namespace DAL.Repositories
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[DELETE ERROR]: {ex.InnerException?.Message ?? ex.Message}");
+                Console.WriteLine(ex.InnerException?.Message ?? ex.Message);
                 return false;
             }
         }

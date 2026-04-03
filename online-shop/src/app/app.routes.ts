@@ -1,12 +1,7 @@
-// src/app/app.routes.ts
 import { Routes } from '@angular/router';
- 
+
 export const routes: Routes = [
-  // Trang chủ → redirect sang /products
   { path: '', redirectTo: '/products', pathMatch: 'full' },
- 
-  // Lazy loading — chỉ load component khi người dùng vào trang
-  // Cú pháp MỚI: loadComponent (không phải loadChildren như Angular cũ)
   {
     path: 'products',
     loadComponent: () =>

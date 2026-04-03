@@ -5,7 +5,7 @@ import { ProductCategory, CreateProductCategory } from '../../shared/models/prod
 
 @Injectable({ providedIn: 'root' })
 export class ProductCategoryService {
-  private endpoint = 'productcategory'; // C# ControllerRoute "[controller]" -> ProductCategory -> productcategory
+  private endpoint = 'productcategory';
 
   constructor(private api: ApiService) {}
 
@@ -14,7 +14,6 @@ export class ProductCategoryService {
   }
 
   create(dto: CreateProductCategory): Observable<{createdId: string}> {
-    // Backend trả về Object Ok(new { CreatedId = id });
     return this.api.post<{createdId: string}>(this.endpoint, dto);
   }
 }

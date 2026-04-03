@@ -1,10 +1,6 @@
-﻿// DAL/Repositories/ProductRepository.cs
 using DAL.Data;
 using DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Model.DTOs;
-using Model.Entities;
-using DAL.Data;
 using Model.DTOs;
 using Model.Entities;
 
@@ -14,25 +10,23 @@ namespace OnlineShop.DAL.Repositories
     {
         public ProductRepository(AppDbContext context) : base(context) { }
 
-        // LINQ — JOIN với Category và Supplier, chiếu ra DTO
         public async Task<IEnumerable<ProductDto>> GetAllWithDetailsAsync()
         {
             return await _context.Products
-                .Include(p => p.Category)    // EF tự JOIN bảng ProductCategory
-                .Include(p => p.Supplier)    // EF tự JOIN bảng Supplier
-                .Select(p => new ProductDto  // Chiếu ra DTO
+                .Include(p => p.Category)
+                .Include(p => p.Supplier)
+                .Select(p => new ProductDto
                 {
                     ProductId = p.ProductId,
                     ProductName = p.ProductName,
                     Price = p.Price,
-                    CategoryName = p.Category!.CategoryName,
-                    SupplierName = p.Supplier!.SupplierName,
+                    CategoryName = p.Category != null ? p.Category.CategoryName : null,
+                    SupplierName = p.Supplier != null ? p.Supplier.SupplierName : null,
                     StockQuantity = p.StockQuantity
                 })
                 .ToListAsync();
         }
 
-        // LINQ với Where — tìm kiếm theo tên
         public async Task<IEnumerable<ProductDto>> SearchByNameAsync(string keyword)
         {
             return await _context.Products
@@ -43,7 +37,7 @@ namespace OnlineShop.DAL.Repositories
                     ProductId = p.ProductId,
                     ProductName = p.ProductName,
                     Price = p.Price,
-                    CategoryName = p.Category!.CategoryName,
+                    CategoryName = p.Category != null ? p.Category.CategoryName : null,
                     StockQuantity = p.StockQuantity
                 })
                 .ToListAsync();
