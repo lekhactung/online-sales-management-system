@@ -9,6 +9,10 @@
 
 ## System Architecture:
 
+### 1. ERD:
+![erd](assets/OnlineSales.png)
+
+### 2. System dataflow:
 
 ---
 
