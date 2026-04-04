@@ -1,0 +1,50 @@
+<div>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">Quản lý Đơn hàng</h2>
+  </div>
+
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-info"></div>
+    <p class="mt-2 text-secondary">Đang tải dữ liệu...</p>
+  </div>
+
+  <div *ngIf="error && !isLoading" class="alert alert-danger d-flex align-items-center gap-2">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    {{ error }}
+  </div>
+
+  <div *ngIf="!isLoading" class="table-responsive rounded-3 shadow">
+    <table class="table table-hover mb-0"
+           style="background:#1e293b; color:white; border-color:#334155;">
+      <thead style="background:#0f172a; color:#94a3b8;">
+        <tr>
+          <th class="py-3">ID</th>
+          <th class="py-3">Ngày Đặt</th>
+          <th class="py-3">Khách Hàng</th>
+          <th class="py-3">Tổng Tiền (VNĐ)</th>
+          <th class="py-3">Trạng Thái</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let o of orders" style="border-color:#334155;">
+          <td class="text-secondary py-3">{{ o.OrderId }}</td>
+          <td class="py-3">{{ o.OrderDate | date:'dd/MM/yyyy' }}</td>
+          <td class="fw-bold text-info py-3">{{ o.CustomerName ?? o.CustomerId }}</td>
+          <td class="py-3">{{ o.TotalAmount | number:'1.0-0' }} đ</td>
+          <td class="py-3">
+            <span class="badge"
+                  [class]="o.StatusName === 'DELIVERED' ? 'bg-success' : 'bg-warning text-dark'">
+              {{ o.StatusName ?? o.StatusId }}
+            </span>
+          </td>
+        </tr>
+        <tr *ngIf="orders.length === 0 && !isLoading">
+          <td colspan="5" class="text-center text-secondary py-5">
+            <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+            Không có đơn hàng nào
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

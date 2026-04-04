@@ -1,0 +1,76 @@
+<!-- product-list.html -->
+<div>
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">Quản lý Sản phẩm</h2>
+    <a routerLink="/products/create" class="btn btn-info fw-bold px-3">+ THÊM MỚI</a>
+  </div>
+
+  <!-- Search bar -->
+  <div class="input-group mb-4" style="max-width: 420px">
+    <span class="input-group-text bg-secondary border-0 text-white">
+      <i class="bi bi-search"></i>
+    </span>
+    <input type="text" class="form-control bg-dark text-white border-0 py-2"
+           placeholder="Tìm kiếm sản phẩm..."
+           [(ngModel)]="keyword" (keyup.enter)="onSearch()">
+    <button class="btn btn-outline-secondary" (click)="onSearch()">Tìm</button>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-info"></div>
+    <p class="mt-2 text-secondary">Đang tải dữ liệu từ server...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error && !isLoading" class="alert alert-danger d-flex align-items-center gap-2">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    {{ error }}
+  </div>
+
+  <!-- Table -->
+  <div *ngIf="!isLoading" class="table-responsive rounded-3 shadow">
+    <table class="table table-hover mb-0"
+           style="background:#1e293b; color:white; border-color:#334155;">
+      <thead style="background:#0f172a; color:#94a3b8;">
+        <tr>
+          <th class="py-3">ID</th>
+          <th class="py-3">Tên Sản Phẩm</th>
+          <th class="py-3">Danh Mục</th>
+          <th class="py-3">Giá (VNĐ)</th>
+          <th class="py-3">Tồn Kho</th>
+          <th class="py-3">Thao Tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of filteredProducts" style="border-color:#334155;">
+          <td class="text-secondary py-3">{{ p.ProductId }}</td>
+          <td class="fw-bold text-info py-3">{{ p.ProductName }}</td>
+          <td class="py-3">{{ p.CategoryName ?? '—' }}</td>
+          <td class="py-3">{{ p.Price | number:'1.0-0' }} đ</td>
+          <td class="py-3">
+            <span [class]="p.StockQuantity < 10 ? 'badge bg-danger' : 'badge bg-success'">
+              {{ p.StockQuantity }}
+            </span>
+          </td>
+          <td class="py-3">
+            <a [routerLink]="['/products/edit', p.ProductId]"
+               class="btn btn-sm btn-outline-warning me-2">
+              <i class="bi bi-pencil-square"></i>
+            </a>
+            <button class="btn btn-sm btn-outline-danger" (click)="delete(p.ProductId)">
+              <i class="bi bi-trash3-fill"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredProducts.length === 0 && !isLoading">
+          <td colspan="6" class="text-center text-secondary py-5">
+            <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+            Không có sản phẩm nào
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+*.vs/
+*.json
+*.App
+.http
+Database/
+*.cache
+*/obj
+*/bin
+# Visual Studio
+.vs/
+bin/
+
+# .NET
+*.user
+*.suo
+*.cache
+*.dll
+*.exe
+
+# Angular
+node_modules
+dist/
+.angular/
+
+# Node.js
+package-lock.json
+
+*.github
+*.tex
+*.pdf
