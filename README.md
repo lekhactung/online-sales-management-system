@@ -12,8 +12,8 @@
 ### 1. ERD:
 ![erd](assets/OnlineSales.png)
 
-### 2. System dataflow:
-
+### 2. System architecture:
+![sys_arch](assets/system.png)
 ---
 
 ## Demo
