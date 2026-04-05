@@ -60,17 +60,24 @@ export class ProductFormComponent implements OnInit {
   }
 
   submit(): void {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
     this.isSaving = true;
     this.error = '';
 
     const formValue = this.form.value;
-    const payload = {
+    const payload: any = {
       ProductName: formValue.ProductName,
       Price: Number(formValue.Price),
       CategoryId: formValue.CategoryId,
       StockQuantity: Number(formValue.StockQuantity)
     };
+
+    if (this.isEdit) {
+      payload.ProductId = this.productId;
+    }
 
     const action = this.isEdit
       ? this.productService.update(this.productId!, payload)
@@ -79,7 +86,19 @@ export class ProductFormComponent implements OnInit {
     action.subscribe({
       next: () => this.router.navigate(['/products']),
       error: (err) => {
-        this.error = err?.error?.message ?? err?.error?.error ?? 'Lỗi lưu dữ liệu. Kiểm tra lại thông tin!';
+        let errorMsg = 'Lỗi lưu dữ liệu. Kiểm tra lại thông tin!';
+        if (err?.error?.errors) {
+          const firstErrorKey = Object.keys(err.error.errors)[0];
+          errorMsg = err.error.errors[firstErrorKey][0];
+        } else if (err?.error?.message) {
+          errorMsg = err.error.message;
+        } else if (err?.error?.title) {
+          errorMsg = err.error.title;
+        } else if (typeof err?.error === 'string') {
+          errorMsg = err.error;
+        }
+        
+        this.error = errorMsg;
         this.isSaving = false;
       }
     });
