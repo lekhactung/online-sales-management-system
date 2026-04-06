@@ -74,11 +74,14 @@
           </td>
           <td>
             <div style="display:flex;gap:8px;">
+              <a [routerLink]="['/orders', o.OrderId]" class="action-btn" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);">
+                CHI TIẾT
+              </a>
               <a [routerLink]="['/orders/edit', o.OrderId]" class="action-btn btn-edit">
-                ✏️ Sửa
+                SỬA
               </a>
               <button class="action-btn btn-del" (click)="confirmDelete(o.OrderId)">
-                🗑️ Xoá
+                XÓA
               </button>
             </div>
           </td>
