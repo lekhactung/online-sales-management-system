@@ -53,7 +53,7 @@
 
     <div class="d-flex gap-2">
       <button type="submit" class="btn btn-primary"
-              [disabled]="form.invalid || isSaving">
+              [disabled]="isSaving">
         <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-1"></span>
         {{ isSaving ? 'Đang lưu...' : (isEdit ? 'Cập nhật' : 'Thêm mới') }}
       </button>

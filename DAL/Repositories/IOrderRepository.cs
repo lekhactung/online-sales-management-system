@@ -11,5 +11,7 @@ namespace OnlineShop.DAL.Repositories
         Task<IEnumerable<OrderDto>> GetAllOrdersWithDetailsAsync();
         Task<OrderDto?> GetOrderByIdWithDetailsAsync(string orderId);
         Task<IEnumerable<OrderDto>> GetOrdersByCustomerIdAsync(string customerId);
+        Task<Order?> GetOrderEntityWithDetailsAsync(string orderId);
+        Task ClearOrderDetailsAsync(string orderId);
     }
 }

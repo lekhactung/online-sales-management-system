@@ -22,9 +22,13 @@ namespace DAL.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>().ToTable("Product");
-            modelBuilder.Entity<Order>().ToTable("Orders");
+            modelBuilder.Entity<Order>().ToTable("Orders", tb => tb.HasTrigger("trgUpdateTotalAmount"));
             modelBuilder.Entity<Customer>().ToTable("Customer");
-            modelBuilder.Entity<OrderDetail>().ToTable("OrderDetail");
+            modelBuilder.Entity<OrderDetail>().ToTable("OrderDetail", tb => {
+                tb.HasTrigger("trgAfterInsertOrderDetail");
+                tb.HasTrigger("trgAfterDeleteOrderDetail");
+                tb.HasTrigger("trgUpdateTotalAmount");
+            });
             modelBuilder.Entity<ProductCategory>().ToTable("ProductCategory");
             modelBuilder.Entity<Supplier>().ToTable("Supplier");
             modelBuilder.Entity<Warehouse>().ToTable("Warehouse");

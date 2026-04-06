@@ -39,8 +39,15 @@ namespace API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var createdId = await _service.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = createdId }, new { CustomerId = createdId });
+            try
+            {
+                var createdId = await _service.CreateAsync(dto);
+                return CreatedAtAction(nameof(GetById), new { id = createdId }, new { CustomerId = createdId });
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPut("{id}")]

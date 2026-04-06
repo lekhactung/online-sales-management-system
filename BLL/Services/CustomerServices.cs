@@ -50,18 +50,40 @@ namespace BLL.Services
 
         public async Task<string> CreateAsync(CreateCustomerDto createDto)
         {
-            var customer = new Customer
+            try
             {
-                CustomerId = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(),
-                LastName = createDto.LastName,
-                FirstName = createDto.FirstName,
-                Phone = createDto.Phone,
-                Email = createDto.Email,
-                Address = createDto.Address
-            };
+                var phone = string.IsNullOrWhiteSpace(createDto.Phone) ? null : createDto.Phone.Trim();
+                var email = string.IsNullOrWhiteSpace(createDto.Email) ? null : createDto.Email.Trim();
 
-            await _customerRepository.CreateAsync(customer);
-            return customer.CustomerId;
+                if (phone != null)
+                {
+                    var existingPhone = await _customerRepository.SearchByPhoneAsync(phone);
+                    if (existingPhone.Any()) throw new Exception("Số điện thoại này đã được sử dụng.");
+                }
+
+                if (email != null)
+                {
+                    var all = await _customerRepository.GetAllAsync();
+                    if (all.Any(c => c.Email == email)) throw new Exception("Email này đã được sử dụng.");
+                }
+
+                var customer = new Customer
+                {
+                    CustomerId = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(),
+                    LastName = createDto.LastName,
+                    FirstName = createDto.FirstName,
+                    Phone = phone,
+                    Email = email,
+                    Address = createDto.Address
+                };
+
+                await _customerRepository.CreateAsync(customer);
+                return customer.CustomerId;
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException)
+            {
+                throw new Exception("Lỗi CSDL: Số điện thoại hoặc Email đã tồn tại (hoặc bị trùng lặp khoảng trống). Vui lòng điền giá trị khác.");
+            }
         }
 
         public async Task<bool> UpdateAsync(string id, CustomerDto updateDto)

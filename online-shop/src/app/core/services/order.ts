@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api';
-import { Order } from '../../shared/models/order.model';
+import { Order, CreateOrder, UpdateOrder } from '../../shared/models/order.model';
 
 @Injectable({ providedIn: 'root' })
 export class OrderService {
@@ -13,19 +13,27 @@ export class OrderService {
     return this.api.get<Order[]>(this.endpoint);
   }
 
-  getById(id: number): Observable<Order> {
+  getById(id: string): Observable<Order> {
     return this.api.get<Order>(`${this.endpoint}/${id}`);
   }
 
-  create(order: Partial<Order>): Observable<Order> {
-    return this.api.post<Order>(this.endpoint, order);
+  create(dto: CreateOrder): Observable<{OrderId: string}> {
+    return this.api.post<{OrderId: string}>(this.endpoint, dto);
   }
 
-  updateStatus(id: string, statusId: string): Observable<Order> {
-    return this.api.put<Order>(`${this.endpoint}/${id}/status`, { statusId });
+  update(id: string, dto: UpdateOrder): Observable<void> {
+    return this.api.put<void>(`${this.endpoint}/${id}`, dto);
+  }
+
+  updateStatus(id: string, statusId: string): Observable<void> {
+    return this.api.patch<void>(`${this.endpoint}/${id}/status`, { StatusId: statusId });
   }
 
   getOrdersByCustomer(customerId: string): Observable<Order[]> {
     return this.api.get<Order[]>(`${this.endpoint}/customer/${customerId}`);
+  }
+
+  delete(id: string): Observable<void> {
+    return this.api.delete<void>(`${this.endpoint}/${id}`);
   }
 }

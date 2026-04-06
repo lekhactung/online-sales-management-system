@@ -30,6 +30,9 @@ namespace BLL.Services
                 ProductId = p.ProductId,
                 ProductName = p.ProductName,
                 Price = p.Price,
+                CategoryId = p.CategoryId,
+                CategoryName = p.Category?.CategoryName,
+                SupplierName = p.Supplier?.SupplierName,
                 StockQuantity = p.StockQuantity
             };
         }
@@ -57,6 +60,7 @@ namespace BLL.Services
                 ProductId = entity.ProductId,
                 ProductName = entity.ProductName,
                 Price = entity.Price,
+                CategoryId = entity.CategoryId,
                 StockQuantity = entity.StockQuantity
             };
         }
@@ -68,6 +72,7 @@ namespace BLL.Services
 
             existing.ProductName = dto.ProductName;
             existing.Price = dto.Price;
+            existing.CategoryId = dto.CategoryId;
             existing.StockQuantity = dto.StockQuantity;
 
             var updated = await _repo.UpdateAsync(existing);

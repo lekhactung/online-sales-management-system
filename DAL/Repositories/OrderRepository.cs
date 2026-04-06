@@ -77,5 +77,19 @@ namespace OnlineShop.DAL.Repositories
                 })
                 .ToListAsync();
         }
+
+        public async Task<Order?> GetOrderEntityWithDetailsAsync(string orderId)
+        {
+            return await _context.Orders
+                .Include(o => o.OrderDetails)
+                .FirstOrDefaultAsync(o => o.OrderId == orderId);
+        }
+
+        public async Task ClearOrderDetailsAsync(string orderId)
+        {
+            var details = _context.OrderDetails.Where(od => od.OrderId == orderId);
+            _context.OrderDetails.RemoveRange(details);
+            await _context.SaveChangesAsync();
+        }
     }
 }

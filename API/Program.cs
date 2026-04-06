@@ -20,6 +20,7 @@ builder.Services.AddScoped<IOrderServices, OrderServices>();
 
 builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
 builder.Services.AddScoped<IProductCategoryServices, ProductCategoryServices>();
+builder.Services.AddScoped<IOrderStatusServices, OrderStatusServices>();
 
 builder.Services.AddControllers(options =>
 {

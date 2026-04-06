@@ -31,7 +31,6 @@ namespace BLL.Services
 
         public async Task<string> CreateOrderAsync(CreateOrderDto createDto)
         {
-            decimal totalAmount = 0;
             var orderDetails = new List<OrderDetail>();
 
             foreach (var item in createDto.OrderDetails)
@@ -42,8 +41,6 @@ namespace BLL.Services
 
                 if (product.StockQuantity < item.Quantity)
                     throw new Exception($"Sản phẩm '{product.ProductName}' không đủ tồn kho (Tồn: {product.StockQuantity}, Cần: {item.Quantity}).");
-
-                totalAmount += item.Quantity * item.UnitPrice;
 
                 orderDetails.Add(new OrderDetail
                 {
@@ -58,20 +55,10 @@ namespace BLL.Services
                 OrderId = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(),
                 OrderDate = DateTime.Now,
                 CustomerId = createDto.CustomerId,
-                StatusId = "PENDING",
-                TotalAmount = totalAmount,
+                StatusId = string.IsNullOrEmpty(createDto.StatusId) ? "TT01" : createDto.StatusId,
+                TotalAmount = 0,
                 OrderDetails = orderDetails
             };
-
-            foreach (var item in createDto.OrderDetails)
-            {
-                var product = await _productRepository.GetByIdAsync(item.ProductId);
-                if (product != null)
-                {
-                    product.StockQuantity -= item.Quantity;
-                    await _productRepository.UpdateAsync(product);
-                }
-            }
 
             await _orderRepository.CreateAsync(order);
 
@@ -81,6 +68,67 @@ namespace BLL.Services
         public async Task<IEnumerable<OrderDto>> GetOrdersByCustomerIdAsync(string customerId)
         {
             return await _orderRepository.GetOrdersByCustomerIdAsync(customerId);
+        }
+
+        public async Task<bool> UpdateOrderStatusAsync(string id, string statusId)
+        {
+            var order = await _orderRepository.GetByIdAsync(id);
+            if (order == null) return false;
+
+            order.StatusId = statusId;
+            var updated = await _orderRepository.UpdateAsync(order);
+            return updated != null;
+        }
+
+        public async Task<bool> UpdateOrderAsync(string id, UpdateOrderDto dto)
+        {
+            var order = await _orderRepository.GetOrderEntityWithDetailsAsync(id);
+            if (order == null) return false;
+
+            await _orderRepository.ClearOrderDetailsAsync(id);
+
+            order.CustomerId = dto.CustomerId;
+            if (!string.IsNullOrEmpty(dto.StatusId))
+                order.StatusId = dto.StatusId;
+
+            var newDetails = new List<OrderDetail>();
+
+            foreach (var item in dto.OrderDetails)
+            {
+                var product = await _productRepository.GetByIdAsync(item.ProductId);
+                if (product == null) throw new Exception($"Sản phẩm {item.ProductId} không tồn tại.");
+                
+                // Trigger after deletion of previous order restored original stock. 
+                // We check if it is enough for the new requested quantity.
+                if (product.StockQuantity < item.Quantity)
+                    throw new Exception($"Sản phẩm '{product.ProductName}' không đủ tồn kho (Tồn: {product.StockQuantity}, Yêu cầu: {item.Quantity}).");
+
+                newDetails.Add(new OrderDetail
+                {
+                    OrderId   = order.OrderId,
+                    ProductId = item.ProductId,
+                    Quantity  = item.Quantity,
+                    UnitPrice = item.UnitPrice
+                });
+            }
+
+            order.OrderDetails = newDetails;
+
+            var updated = await _orderRepository.UpdateAsync(order);
+            return updated != null;
+        }
+
+        public async Task<bool> DeleteOrderAsync(string id)
+        {
+            var order = await _orderRepository.GetOrderEntityWithDetailsAsync(id);
+            if (order == null) return false;
+
+            // Remove OrderDetails first to trigger stock restore and avoid FK constraint 
+            await _orderRepository.ClearOrderDetailsAsync(id);
+
+            // Remove Order
+            var result = await _orderRepository.DeleteAsync(id);
+            return result;
         }
     }
 }

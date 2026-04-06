@@ -20,6 +20,7 @@ namespace OnlineShop.DAL.Repositories
                     ProductId = p.ProductId,
                     ProductName = p.ProductName,
                     Price = p.Price,
+                    CategoryId = p.CategoryId,
                     CategoryName = p.Category != null ? p.Category.CategoryName : null,
                     SupplierName = p.Supplier != null ? p.Supplier.SupplierName : null,
                     StockQuantity = p.StockQuantity
@@ -37,6 +38,7 @@ namespace OnlineShop.DAL.Repositories
                     ProductId = p.ProductId,
                     ProductName = p.ProductName,
                     Price = p.Price,
+                    CategoryId = p.CategoryId,
                     CategoryName = p.Category != null ? p.Category.CategoryName : null,
                     StockQuantity = p.StockQuantity
                 })

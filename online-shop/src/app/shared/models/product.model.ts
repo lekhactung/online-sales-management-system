@@ -3,6 +3,7 @@ export interface Product {
   ProductId: string;
   ProductName: string;
   Price: number;
+  CategoryId: string;
   CategoryName?: string;
   SupplierName?: string;
   StockQuantity: number;

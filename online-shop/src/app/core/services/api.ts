@@ -25,6 +25,10 @@ export class ApiService {
     return this.http.delete<T>(`${this.baseUrl}/${endpoint}`);
   }
 
+  patch<T>(endpoint: string, body: any): Observable<T> {
+    return this.http.patch<T>(`${this.baseUrl}/${endpoint}`, body);
+  }
+
   getAsXml(endpoint: string): Observable<string> {
     const headers = new HttpHeaders({ 'Accept': 'application/xml' });
     return this.http.get(`${this.baseUrl}/${endpoint}`, { headers, responseType: 'text' });

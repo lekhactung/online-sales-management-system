@@ -10,5 +10,8 @@ namespace BLL.Services
         Task<OrderDto?> GetByIdAsync(string id);
         Task<string> CreateOrderAsync(CreateOrderDto createDto);
         Task<IEnumerable<OrderDto>> GetOrdersByCustomerIdAsync(string customerId);
+        Task<bool> UpdateOrderAsync(string id, UpdateOrderDto updateDto);
+        Task<bool> UpdateOrderStatusAsync(string id, string statusId);
+        Task<bool> DeleteOrderAsync(string id);
     }
 }

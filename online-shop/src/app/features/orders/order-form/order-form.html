@@ -1,0 +1,167 @@
+<div style="max-width:960px;margin:0 auto;">
+
+  <!-- Header -->
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;">
+    <a routerLink="/orders" style="
+      background:#1e293b;border:1px solid #334155;color:#94a3b8;
+      border-radius:10px;padding:8px 14px;text-decoration:none;font-size:0.85rem;
+      display:inline-flex;align-items:center;gap:5px;">← Quay lại</a>
+    <h2 style="margin:0;font-size:1.4rem;font-weight:700;color:#f1f5f9;">
+      {{ isEdit ? '✏️ Sửa Đơn Hàng' : '🛒 Tạo Đơn Hàng Mới' }}
+    </h2>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error" style="background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);color:#f87171;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem;">
+    ⚠️ {{ error }}
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" style="text-align:center;padding:3rem;">
+    <div class="spinner-border text-info" style="width:2.5rem;height:2.5rem;"></div>
+    <p style="color:#64748b;margin-top:.75rem;">Đang tải dữ liệu...</p>
+  </div>
+
+  <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="submit()">
+
+    <!-- Card: Thông tin đơn hàng -->
+    <div style="background:#1e293b;border:1px solid #334155;border-radius:16px;overflow:hidden;margin-bottom:1.5rem;box-shadow:0 4px 24px rgba(0,0,0,.35);">
+      <div style="background:#0f172a;padding:14px 20px;border-bottom:1px solid #334155;display:flex;align-items:center;gap:8px;">
+        <span style="font-size:1rem;">📋</span>
+        <span style="font-weight:700;color:#f1f5f9;font-size:0.95rem;">Thông Tin Đơn Hàng</span>
+      </div>
+      <div style="padding:1.25rem;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+
+        <!-- Khách hàng -->
+        <div>
+          <label style="display:block;font-size:0.83rem;font-weight:600;color:#94a3b8;margin-bottom:6px;">
+            Khách Hàng <span style="color:#f87171;">*</span>
+          </label>
+          <select formControlName="CustomerId"
+                  style="width:100%;background:#0f172a;border:1px solid #334155;color:#e2e8f0;border-radius:8px;padding:9px 12px;font-size:0.9rem;"
+                  [style.borderColor]="form.get('CustomerId')?.invalid && form.get('CustomerId')?.touched ? '#f87171' : '#334155'">
+            <option value="">-- Chọn khách hàng --</option>
+            <option *ngFor="let c of customers" [value]="c.CustomerId">
+              {{ c.LastName }} {{ c.FirstName }}<ng-container *ngIf="c.Phone"> — {{ c.Phone }}</ng-container>
+            </option>
+          </select>
+          <div *ngIf="form.get('CustomerId')?.invalid && form.get('CustomerId')?.touched"
+               style="color:#f87171;font-size:0.78rem;margin-top:4px;">Vui lòng chọn khách hàng</div>
+        </div>
+
+        <!-- Trạng thái -->
+        <div>
+          <label style="display:block;font-size:0.83rem;font-weight:600;color:#94a3b8;margin-bottom:6px;">
+            Trạng Thái <span style="color:#f87171;">*</span>
+          </label>
+          <select formControlName="StatusId"
+                  style="width:100%;background:#0f172a;border:1px solid #334155;color:#e2e8f0;border-radius:8px;padding:9px 12px;font-size:0.9rem;">
+            <option *ngFor="let s of statuses" [value]="s.id">{{ s.label }}</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Card: Chi tiết sản phẩm -->
+    <div style="background:#1e293b;border:1px solid #334155;border-radius:16px;overflow:hidden;margin-bottom:1.5rem;box-shadow:0 4px 24px rgba(0,0,0,.35);">
+      <div style="background:#0f172a;padding:14px 20px;border-bottom:1px solid #334155;display:flex;align-items:center;justify-content:space-between;">
+        <span style="display:flex;align-items:center;gap:8px;font-weight:700;color:#f1f5f9;font-size:0.95rem;">
+          <span>📦</span> Chi Tiết Sản Phẩm
+        </span>
+        <button type="button" (click)="addLine()"
+                style="background:linear-gradient(135deg,#059669,#047857);border:none;color:#fff;border-radius:8px;padding:6px 14px;font-size:0.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;">
+          ＋ Thêm dòng
+        </button>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;color:#e2e8f0;">
+          <thead>
+            <tr style="background:#0f172a;">
+              <th style="padding:12px 16px;font-size:0.78rem;text-transform:uppercase;letter-spacing:.05em;color:#64748b;font-weight:600;border-bottom:1px solid #334155;text-align:left;width:40%;">
+                Sản Phẩm <span style="color:#f87171;">*</span>
+              </th>
+              <th style="padding:12px 16px;font-size:0.78rem;text-transform:uppercase;letter-spacing:.05em;color:#64748b;font-weight:600;border-bottom:1px solid #334155;text-align:center;width:15%;">
+                Số Lượng <span style="color:#f87171;">*</span>
+              </th>
+              <th style="padding:12px 16px;font-size:0.78rem;text-transform:uppercase;letter-spacing:.05em;color:#64748b;font-weight:600;border-bottom:1px solid #334155;text-align:right;width:20%;">
+                Đơn Giá (đ)
+              </th>
+              <th style="padding:12px 16px;font-size:0.78rem;text-transform:uppercase;letter-spacing:.05em;color:#64748b;font-weight:600;border-bottom:1px solid #334155;text-align:right;width:18%;">
+                Thành Tiền
+              </th>
+              <th style="width:7%;border-bottom:1px solid #334155;"></th>
+            </tr>
+          </thead>
+          <tbody formArrayName="orderDetails">
+            <tr *ngIf="orderDetails.length === 0">
+              <td colspan="5" style="text-align:center;padding:2rem;color:#475569;">
+                Chưa có sản phẩm. Nhấn "＋ Thêm dòng" để bắt đầu.
+              </td>
+            </tr>
+            <tr *ngFor="let row of orderDetails.controls; let i = index"
+                [formGroupName]="i"
+                style="border-bottom:1px solid #1e3a5f22;">
+              <td style="padding:12px 16px;">
+                <select formControlName="ProductId"
+                        (change)="onProductChange(i)"
+                        style="width:100%;background:#0f172a;border:1px solid #334155;color:#e2e8f0;border-radius:8px;padding:7px 10px;font-size:0.85rem;">
+                  <option value="">-- Chọn sản phẩm --</option>
+                  <option *ngFor="let p of products" [value]="p.ProductId">{{ p.ProductName }}</option>
+                </select>
+                <div *ngIf="row.get('ProductId')?.invalid && row.get('ProductId')?.touched"
+                     style="color:#f87171;font-size:0.75rem;margin-top:3px;">Chọn sản phẩm</div>
+              </td>
+              <td style="padding:12px 16px;text-align:center;">
+                <input type="number" formControlName="Quantity" min="1"
+                       style="width:80px;background:#0f172a;border:1px solid #334155;color:#e2e8f0;border-radius:8px;padding:7px 10px;font-size:0.85rem;text-align:center;">
+                <div *ngIf="row.get('Quantity')?.invalid && row.get('Quantity')?.touched"
+                     style="color:#f87171;font-size:0.75rem;margin-top:3px;">≥ 1</div>
+              </td>
+              <td style="padding:12px 16px;text-align:right;">
+                <input type="number" formControlName="UnitPrice" min="0"
+                       style="width:120px;background:#0f172a;border:1px solid #334155;color:#34d399;border-radius:8px;padding:7px 10px;font-size:0.85rem;text-align:right;font-weight:600;">
+              </td>
+              <td style="padding:12px 16px;text-align:right;font-weight:700;color:#34d399;">
+                {{ getRowTotal(row) | number:'1.0-0' }} đ
+              </td>
+              <td style="padding:12px 16px;text-align:center;">
+                <button type="button" (click)="removeLine(i)"
+                        [disabled]="orderDetails.length <= 1"
+                        style="background:transparent;border:1px solid #334155;color:#f87171;border-radius:8px;padding:5px 10px;cursor:pointer;font-size:0.85rem;transition:all .2s;"
+                        [style.opacity]="orderDetails.length <= 1 ? '.35' : '1'">✕</button>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr style="background:#0f172a;border-top:2px solid #334155;">
+              <td colspan="3" style="padding:14px 16px;text-align:right;font-weight:600;color:#94a3b8;">
+                Tổng cộng:
+              </td>
+              <td style="padding:14px 16px;text-align:right;font-weight:800;color:#06b6d4;font-size:1.05rem;">
+                {{ grandTotal | number:'1.0-0' }} đ
+              </td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div style="display:flex;gap:10px;">
+      <button type="submit" [disabled]="isSaving"
+              style="background:linear-gradient(135deg,#06b6d4,#0284c7);border:none;color:#fff;border-radius:10px;padding:11px 28px;font-weight:700;font-size:0.95rem;cursor:pointer;display:flex;align-items:center;gap:8px;transition:opacity .2s;"
+              [style.opacity]="isSaving ? '.6' : '1'">
+        <span *ngIf="isSaving" class="spinner-border spinner-border-sm"></span>
+        {{ isSaving ? 'Đang lưu...' : (isEdit ? '✅ Cập nhật đơn hàng' : '🛒 Tạo đơn hàng') }}
+      </button>
+      <a routerLink="/orders"
+         style="background:#1e293b;border:1px solid #334155;color:#94a3b8;border-radius:10px;padding:11px 20px;font-size:0.9rem;text-decoration:none;display:inline-flex;align-items:center;">
+        Hủy
+      </a>
+    </div>
+
+  </form>
+</div>

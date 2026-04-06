@@ -16,3 +16,20 @@ export interface OrderDetail {
   Quantity: number;
   UnitPrice: number;
 }
+
+export interface CreateOrderDetail {
+  ProductId: string;
+  Quantity: number;
+  UnitPrice: number;
+}
+
+export interface CreateOrder {
+  CustomerId: string;
+  OrderDetails: CreateOrderDetail[];
+}
+
+export interface UpdateOrder {
+  CustomerId: string;
+  StatusId: string;
+  OrderDetails: CreateOrderDetail[];
+}

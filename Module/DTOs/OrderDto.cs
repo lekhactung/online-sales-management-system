@@ -26,6 +26,7 @@ namespace Model.DTOs
     public class CreateOrderDto
     {
         public string CustomerId { get; set; } = string.Empty;
+        public string StatusId { get; set; } = "TT01";
         public List<CreateOrderDetailDto> OrderDetails { get; set; } = new List<CreateOrderDetailDto>();
     }
 
@@ -34,5 +35,23 @@ namespace Model.DTOs
         public string ProductId { get; set; } = string.Empty;
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
+    }
+
+    public class UpdateOrderDto
+    {
+        public string CustomerId { get; set; } = string.Empty;
+        public string StatusId { get; set; } = string.Empty;
+        public List<CreateOrderDetailDto> OrderDetails { get; set; } = new List<CreateOrderDetailDto>();
+    }
+
+    public class UpdateOrderStatusDto
+    {
+        public string StatusId { get; set; } = string.Empty;
+    }
+
+    public class OrderStatusDto
+    {
+        public string StatusId { get; set; } = string.Empty;
+        public string StatusName { get; set; } = string.Empty;
     }
 }

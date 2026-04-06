@@ -7,10 +7,10 @@ namespace Model.Entities
 {
     public class Product
     {
-        public string ProductId { get; set; }
+        public string ProductId { get; set; } = string.Empty;
         public string ProductName { get; set; } = string.Empty;
         public decimal Price { get; set; }
-        public string CategoryId { get; set; }
+        public string CategoryId { get; set; } = string.Empty;
         public string? SupplierId { get; set; }
         public string? WarehouseId { get; set; }
         public int StockQuantity { get; set; }

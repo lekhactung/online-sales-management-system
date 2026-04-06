@@ -33,10 +33,34 @@ export const routes: Routes = [
         .then(m => m.OrderListComponent)
   },
   {
+    path: 'orders/create',
+    loadComponent: () =>
+      import('./features/orders/order-form/order-form')
+        .then(m => m.OrderFormComponent)
+  },
+  {
+    path: 'orders/edit/:id',
+    loadComponent: () =>
+      import('./features/orders/order-form/order-form')
+        .then(m => m.OrderFormComponent)
+  },
+  {
     path: 'customers',
     loadComponent: () =>
       import('./features/customers/customer-list/customer-list')
         .then(m => m.CustomerListComponent)
+  },
+  {
+    path: 'customers/create',
+    loadComponent: () =>
+      import('./features/customers/customer-form/customer-form')
+        .then(m => m.CustomerFormComponent)
+  },
+  {
+    path: 'customers/edit/:id',
+    loadComponent: () =>
+      import('./features/customers/customer-form/customer-form')
+        .then(m => m.CustomerFormComponent)
   },
   { path: '**', redirectTo: '/products' }
 ];

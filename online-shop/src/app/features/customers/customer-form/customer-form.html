@@ -1,0 +1,114 @@
+<div style="max-width:600px;margin:0 auto;">
+  <!-- Header -->
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;">
+    <a routerLink="/customers" style="
+      background:#1e293b; border:1px solid #334155; color:#94a3b8;
+      border-radius:10px; padding:8px 14px; text-decoration:none; font-size:0.85rem;
+      display:inline-flex; align-items:center; gap:5px; transition:all .2s;
+    ">← Quay lại</a>
+    <h2 style="margin:0;font-size:1.4rem;font-weight:700;color:#f1f5f9;">
+      {{ isEdit ? '✏️ Sửa Khách Hàng' : '👤 Thêm Khách Hàng Mới' }}
+    </h2>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error" style="background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);color:#f87171;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem;">
+    ⚠️ {{ error }}
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" style="text-align:center;padding:3rem;">
+    <div class="spinner-border text-info" style="width:2.5rem;height:2.5rem;"></div>
+    <p style="color:#64748b;margin-top:.75rem;">Đang tải dữ liệu...</p>
+  </div>
+
+  <!-- Form Card -->
+  <div *ngIf="!isLoading" style="background:#1e293b;border:1px solid #334155;border-radius:16px;padding:1.75rem;box-shadow:0 4px 24px rgba(0,0,0,.35);">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+
+      <!-- Họ & Tên -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:1.2rem;">
+        <div>
+          <label style="display:block;font-size:0.83rem;font-weight:600;color:#94a3b8;margin-bottom:6px;">
+            Họ <span style="color:#f87171;">*</span>
+          </label>
+          <input type="text" formControlName="LastName"
+                 placeholder="VD: Nguyễn"
+                 style="width:100%;background:#0f172a;border:1px solid #334155;color:#f1f5f9;border-radius:8px;padding:9px 12px;font-size:0.9rem;box-sizing:border-box;transition:border-color .2s;"
+                 [style.borderColor]="form.get('LastName')?.invalid && form.get('LastName')?.touched ? '#f87171' : '#334155'">
+          <div *ngIf="form.get('LastName')?.invalid && form.get('LastName')?.touched"
+               style="color:#f87171;font-size:0.78rem;margin-top:4px;">
+            Họ không được để trống (tối thiểu 2 ký tự)
+          </div>
+        </div>
+        <div>
+          <label style="display:block;font-size:0.83rem;font-weight:600;color:#94a3b8;margin-bottom:6px;">
+            Tên <span style="color:#f87171;">*</span>
+          </label>
+          <input type="text" formControlName="FirstName"
+                 placeholder="VD: Văn A"
+                 style="width:100%;background:#0f172a;border:1px solid #334155;color:#f1f5f9;border-radius:8px;padding:9px 12px;font-size:0.9rem;box-sizing:border-box;transition:border-color .2s;"
+                 [style.borderColor]="form.get('FirstName')?.invalid && form.get('FirstName')?.touched ? '#f87171' : '#334155'">
+          <div *ngIf="form.get('FirstName')?.invalid && form.get('FirstName')?.touched"
+               style="color:#f87171;font-size:0.78rem;margin-top:4px;">
+            Tên không được để trống (tối thiểu 2 ký tự)
+          </div>
+        </div>
+      </div>
+
+      <!-- Điện thoại -->
+      <div style="margin-bottom:1.2rem;">
+        <label style="display:block;font-size:0.83rem;font-weight:600;color:#94a3b8;margin-bottom:6px;">
+          📞 Số Điện Thoại
+        </label>
+        <input type="tel" formControlName="Phone"
+               placeholder="VD: 0901234567"
+               style="width:100%;background:#0f172a;border:1px solid #334155;color:#f1f5f9;border-radius:8px;padding:9px 12px;font-size:0.9rem;box-sizing:border-box;"
+               [style.borderColor]="form.get('Phone')?.invalid && form.get('Phone')?.touched ? '#f87171' : '#334155'">
+        <div *ngIf="form.get('Phone')?.invalid && form.get('Phone')?.touched"
+             style="color:#f87171;font-size:0.78rem;margin-top:4px;">
+          Số điện thoại không hợp lệ (9–11 chữ số)
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div style="margin-bottom:1.2rem;">
+        <label style="display:block;font-size:0.83rem;font-weight:600;color:#94a3b8;margin-bottom:6px;">
+          ✉️ Email
+        </label>
+        <input type="email" formControlName="Email"
+               placeholder="VD: abc@gmail.com"
+               style="width:100%;background:#0f172a;border:1px solid #334155;color:#f1f5f9;border-radius:8px;padding:9px 12px;font-size:0.9rem;box-sizing:border-box;"
+               [style.borderColor]="form.get('Email')?.invalid && form.get('Email')?.touched ? '#f87171' : '#334155'">
+        <div *ngIf="form.get('Email')?.invalid && form.get('Email')?.touched"
+             style="color:#f87171;font-size:0.78rem;margin-top:4px;">Email không hợp lệ</div>
+      </div>
+
+      <!-- Địa chỉ -->
+      <div style="margin-bottom:1.75rem;">
+        <label style="display:block;font-size:0.83rem;font-weight:600;color:#94a3b8;margin-bottom:6px;">
+          📍 Địa Chỉ
+        </label>
+        <textarea formControlName="Address" rows="2"
+                  placeholder="VD: 123 Đường ABC, TP.HCM"
+                  style="width:100%;background:#0f172a;border:1px solid #334155;color:#f1f5f9;border-radius:8px;padding:9px 12px;font-size:0.9rem;box-sizing:border-box;resize:vertical;"></textarea>
+      </div>
+
+      <!-- Actions -->
+      <div style="display:flex;gap:10px;">
+        <button type="submit"
+                [disabled]="isSaving"
+                style="background:linear-gradient(135deg,#06b6d4,#0284c7);border:none;color:#fff;border-radius:10px;padding:10px 24px;font-weight:700;font-size:0.9rem;cursor:pointer;display:flex;align-items:center;gap:6px;transition:opacity .2s;"
+                [style.opacity]="isSaving ? '.6' : '1'">
+          <span *ngIf="isSaving" class="spinner-border spinner-border-sm"></span>
+          {{ isSaving ? 'Đang lưu...' : (isEdit ? '✅ Cập nhật' : '➕ Thêm mới') }}
+        </button>
+        <a routerLink="/customers"
+           style="background:#1e293b;border:1px solid #334155;color:#94a3b8;border-radius:10px;padding:10px 20px;font-size:0.9rem;text-decoration:none;display:inline-flex;align-items:center;">
+          Hủy
+        </a>
+      </div>
+
+    </form>
+  </div>
+</div>

@@ -49,5 +49,40 @@ namespace API.Controllers
             var orders = await _service.GetOrdersByCustomerIdAsync(customerId);
             return Ok(orders);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(string id, [FromBody] UpdateOrderDto dto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            try
+            {
+                var ok = await _service.UpdateOrderAsync(id, dto);
+                if (!ok) return NotFound("Đơn hàng không tồn tại.");
+                return NoContent();
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPatch("{id}/status")]
+        public async Task<IActionResult> UpdateStatus(string id, [FromBody] UpdateOrderStatusDto dto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var ok = await _service.UpdateOrderStatusAsync(id, dto.StatusId);
+            if (!ok) return NotFound("Đơn hàng không tồn tại.");
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var result = await _service.DeleteOrderAsync(id);
+            if (!result) return NotFound("Đơn hàng không tồn tại.");
+            return NoContent();
+        }
     }
 }

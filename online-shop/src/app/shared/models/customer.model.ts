@@ -8,6 +8,7 @@ export interface Customer {
 }
 
 export interface CreateCustomer {
+  CustomerId?: string;
   LastName: string;
   FirstName: string;
   Phone?: string;

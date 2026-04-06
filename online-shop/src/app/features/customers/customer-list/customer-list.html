@@ -1,106 +1,116 @@
-<div class="premium-container">
-  
-  <div class="header-section">
-    <div class="title-wrapper">
-      <h2 class="hero-title">Quản Lý Khách Hàng</h2>
-      <p class="subtitle">Tìm kiếm và rà soát thông tin liên lạc của các đối tác</p>
+<div>
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-people-fill me-2" viewBox="0 0 16 16" style="color:#06b6d4">
+          <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+          <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>
+          <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
+        </svg>
+        Quản lý Khách Hàng
+      </h2>
+      <p class="page-subtitle">Tìm kiếm và quản lý thông tin khách hàng</p>
     </div>
-
-    <div class="search-glassmorphism">
-      <div class="search-input-group">
-        <select class="form-select custom-select" [(ngModel)]="searchType">
-          <option value="name">Tên Khách Hàng</option>
-          <option value="phone">Số Điện Thoại</option>
-        </select>
-        
-        <input 
-          type="text" 
-          class="form-control custom-input" 
-          placeholder="Nhập từ khóa tìm kiếm..." 
-          [(ngModel)]="searchQuery"
-          (keyup.enter)="searchCustomers()"
-        >
-        
-        <button class="btn btn-primary d-flex align-items-center gap-2 custom-btn" (click)="searchCustomers()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-          </svg>
-          Tra Cứu
-        </button>
-      </div>
-    </div>
+    <a routerLink="/customers/create" class="btn-create">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+      </svg>
+      Thêm khách hàng
+    </a>
   </div>
 
-  <div *ngIf="isLoading" class="loading-state">
-    <div class="spinner-grow text-primary" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
-    <div class="spinner-grow text-secondary" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
-    <div class="spinner-grow text-success" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
+  <!-- Notifications -->
+  <div *ngIf="error" class="alert-err">⚠️ {{ error }}</div>
+  <div *ngIf="successMsg" class="alert-ok">✅ {{ successMsg }}</div>
+
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <select class="search-select" [(ngModel)]="searchType">
+      <option value="name">Tên Khách Hàng</option>
+      <option value="phone">Số Điện Thoại</option>
+    </select>
+    <input class="search-input" type="text"
+           placeholder="Nhập từ khoá tìm kiếm..."
+           [(ngModel)]="searchQuery"
+           (keyup.enter)="searchCustomers()">
+    <button class="btn-search" (click)="searchCustomers()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85-.017.016zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+      </svg>
+      Tra cứu
+    </button>
+    <button class="btn-search" style="background:#334155;" (click)="loadAllCustomers()" title="Làm mới">↺</button>
   </div>
 
-  <div *ngIf="error" class="alert custom-alert" role="alert">
-    <strong>Cảnh Báo!</strong> {{ error }}
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="spinner-wrap">
+    <div class="spinner-border text-info" style="width:3rem;height:3rem;"></div>
+    <p class="mt-3" style="color:#64748b;">Đang tải dữ liệu...</p>
   </div>
 
-  <div class="table-card" *ngIf="!isLoading">
-    <table class="table premium-table">
+  <!-- Table -->
+  <div *ngIf="!isLoading" class="table-card">
+    <table class="cust-table">
       <thead>
         <tr>
-          <th>Khách Hàng</th>
-          <th>Liên Hệ</th>
-          <th>Địa Chỉ</th>
+          <th>Khách hàng</th>
+          <th>Liên hệ</th>
+          <th>Địa chỉ</th>
           <th>Thao tác</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngIf="customers.length === 0">
-          <td colspan="4" class="text-center py-5 empty-state">
-            <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" width="150" alt="Empty" />
-            <h5>Không tìm thấy kết quả phù hợp!</h5>
+        <tr *ngIf="customers.length === 0" class="empty-row">
+          <td colspan="4">
+            <div style="font-size:2.5rem;">👥</div>
+            <p style="margin-top:.5rem;">Không tìm thấy khách hàng nào</p>
           </td>
         </tr>
 
-        <tr *ngFor="let c of customers" class="table-row">
+        <tr *ngFor="let c of customers">
           <td>
-            <div class="d-flex align-items-center gap-3">
-              <div class="avatar-circle">
-                {{ getInitials(c.FirstName, c.LastName) }}
-              </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div class="avatar-circle">{{ getInitials(c.FirstName, c.LastName) }}</div>
               <div>
-                <h6 class="mb-0 fw-bold">{{ c.LastName }} {{ c.FirstName }}</h6>
-                <small class="text-muted">ID: <span class="badge bg-light text-dark shadow-sm">{{ c.CustomerId?.substring(0,8) }}...</span></small>
+                <div class="cust-name">{{ c.LastName }} {{ c.FirstName }}</div>
+                <div class="cust-id">ID: {{ c.CustomerId?.substring(0,8) }}...</div>
               </div>
             </div>
           </td>
           <td>
-             <div class="contact-info">
-               <div class="d-flex align-items-center gap-2 mb-1">
-                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#6B7280" class="bi bi-telephone-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/></svg>
-                 <span class="text-dark fw-medium">{{ c.Phone || 'Chưa cập nhật' }}</span>
-               </div>
-               <div class="d-flex align-items-center gap-2">
-                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#6B7280" class="bi bi-envelope-fill" viewBox="0 0 16 16"><path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"/></svg>
-                 <span class="text-muted small">{{ c.Email || 'Chưa cập nhật' }}</span>
-               </div>
-             </div>
+            <div class="contact-line">📞 {{ c.Phone || 'Chưa cập nhật' }}</div>
+            <div class="contact-line" style="margin-top:4px;">✉️ {{ c.Email || 'Chưa cập nhật' }}</div>
           </td>
           <td>
-            <span class="address-badge">
-              {{ c.Address || 'Không có dữ liệu' }}
-            </span>
+            <span class="address-tag">{{ c.Address || 'Không có dữ liệu' }}</span>
           </td>
-          <td>
-            <button class="btn btn-outline-primary btn-sm rounded-pill action-btn hover-shadow">
-              Chi Tiết
+          <td style="display:flex;gap:8px;flex-wrap:wrap;">
+            <a [routerLink]="['/customers/edit', c.CustomerId]" class="action-btn btn-edit">
+              ✏️ Sửa
+            </a>
+            <button class="action-btn btn-del" (click)="confirmDelete(c.CustomerId!)">
+              🗑 Xoá
             </button>
           </td>
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <!-- Delete Confirm Modal -->
+  <div *ngIf="deleteConfirmId" class="modal-overlay" (click)="cancelDelete()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div style="font-size:2.5rem;margin-bottom:.5rem;">⚠️</div>
+      <div class="modal-title">Xác nhận xoá</div>
+      <div class="modal-sub">Bạn có chắc muốn xoá khách hàng này? Hành động này không thể hoàn tác.</div>
+      <div class="modal-actions">
+        <button class="btn-cancel-modal" (click)="cancelDelete()">Hủy</button>
+        <button class="btn-confirm-del" (click)="doDelete()" [disabled]="isDeleting">
+          <span *ngIf="isDeleting" class="spinner-border spinner-border-sm me-1"></span>
+          {{ isDeleting ? 'Đang xoá...' : 'Xoá' }}
+        </button>
+      </div>
+    </div>
   </div>
 </div>
