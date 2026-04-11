@@ -1,0 +1,229 @@
+<div class="container-fluid">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-white border-bottom border-info d-inline-block pb-2">Báo Cáo & Thống Kê</h2>
+  </div>
+
+  <!-- Error Alert -->
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Tabs Navigation -->
+  <ul class="nav nav-tabs border-secondary mb-4">
+    <li class="nav-item">
+      <a class="nav-link cursor-pointer" [class.active]="activeTab === 'productRevenue'" [class.bg-dark]="activeTab !== 'productRevenue'" [class.text-white]="activeTab !== 'productRevenue'" (click)="setTab('productRevenue')">
+        <i class="bi bi-graph-up me-2"></i>Doanh Thu Sản Phẩm
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link cursor-pointer" [class.active]="activeTab === 'categoryRevenue'" [class.bg-dark]="activeTab !== 'categoryRevenue'" [class.text-white]="activeTab !== 'categoryRevenue'" (click)="setTab('categoryRevenue')">
+        <i class="bi bi-pie-chart-fill me-2"></i>Doanh Thu Theo Loại
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link cursor-pointer" [class.active]="activeTab === 'monthlySales'" [class.bg-dark]="activeTab !== 'monthlySales'" [class.text-white]="activeTab !== 'monthlySales'" (click)="setTab('monthlySales')">
+        <i class="bi bi-calendar-check-fill me-2"></i>Doanh Số Theo Tháng
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link cursor-pointer" [class.active]="activeTab === 'inventory'" [class.bg-dark]="activeTab !== 'inventory'" [class.text-white]="activeTab !== 'inventory'" (click)="setTab('inventory')">
+        <i class="bi bi-box-seam-fill me-2"></i>Báo Cáo Tồn Kho
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link cursor-pointer" [class.active]="activeTab === 'stock'" [class.bg-dark]="activeTab !== 'stock'" [class.text-white]="activeTab !== 'stock'" (click)="setTab('stock')">
+        <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>Cảnh Báo Hết Hàng
+      </a>
+    </li>
+  </ul>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="text-center my-5 text-info">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Tab Content -->
+  <div *ngIf="!isLoading" class="tab-content text-white">
+
+    <!-- 1. Product Revenue -->
+    <div *ngIf="activeTab === 'productRevenue'" class="fade show active">
+      <div class="card bg-dark border-secondary">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle mb-0">
+              <thead>
+                <tr class="border-secondary">
+                  <th>Mã SP</th>
+                  <th>Tên Sản Phẩm</th>
+                  <th>Số Lượng Đã Bán</th>
+                  <th>Tổng Doanh Thu</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of productRevenue">
+                  <td>{{ item.ProductId }}</td>
+                  <td>{{ item.ProductName }}</td>
+                  <td>{{ item.TotalSold }}</td>
+                  <td class="text-success fw-bold">{{ item.TotalRevenue | number:'1.0-0' }} ₫</td>
+                </tr>
+                <tr *ngIf="productRevenue.length === 0">
+                  <td colspan="4" class="text-center text-muted">Chưa có dữ liệu</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Category Revenue -->
+    <div *ngIf="activeTab === 'categoryRevenue'">
+      <div class="card bg-dark border-secondary">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle mb-0">
+              <thead>
+                <tr class="border-secondary">
+                  <th>Mã Loại</th>
+                  <th>Tên Loại SP</th>
+                  <th>Số Lượng Bán (Tổng)</th>
+                  <th>Số Lượng SP Đã Bán</th>
+                  <th>Tổng Doanh Thu</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of categoryRevenue">
+                  <td>{{ item.CategoryId }}</td>
+                  <td>{{ item.CategoryName }}</td>
+                  <td>{{ item.TotalQuantity }}</td>
+                  <td>{{ item.TotalProductsSold }}</td>
+                  <td class="text-success fw-bold">{{ item.TotalRevenue | number:'1.0-0' }} ₫</td>
+                </tr>
+                <tr *ngIf="categoryRevenue.length === 0">
+                  <td colspan="5" class="text-center text-muted">Chưa có dữ liệu</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Monthly Sales -->
+    <div *ngIf="activeTab === 'monthlySales'">
+      <div class="card bg-dark border-secondary">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle mb-0">
+              <thead>
+                <tr class="border-secondary">
+                  <th>Năm</th>
+                  <th>Tháng</th>
+                  <th>Số Đơn Hàng</th>
+                  <th>Tổng Doanh Số</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of monthlySales">
+                  <td>{{ item.SalesYear }}</td>
+                  <td>{{ item.SalesMonth }}</td>
+                  <td>{{ item.TotalOrders }}</td>
+                  <td class="text-success fw-bold">{{ item.MonthlyRevenue | number:'1.0-0' }} ₫</td>
+                </tr>
+                <tr *ngIf="monthlySales.length === 0">
+                  <td colspan="4" class="text-center text-muted">Chưa có dữ liệu</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Inventory Report -->
+    <div *ngIf="activeTab === 'inventory'">
+      <div class="card bg-dark border-secondary">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle mb-0">
+              <thead>
+                <tr class="border-secondary">
+                  <th>Mã SP</th>
+                  <th>Tên SP</th>
+                  <th>Loại SP</th>
+                  <th>NCC / Kho</th>
+                  <th>Tồn Kho</th>
+                  <th>Tình Trạng</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of inventoryReport">
+                  <td>{{ item.ProductId }}</td>
+                  <td>{{ item.ProductName }}</td>
+                  <td>{{ item.CategoryName || '-' }}</td>
+                  <td>
+                    <div class="small">{{ item.SupplierName || '-' }}</div>
+                    <div class="small text-muted">{{ item.WarehouseName || '-' }}</div>
+                  </td>
+                  <td [class.text-danger]="item.StockQuantity === 0" [class.text-warning]="item.StockQuantity > 0 && item.StockQuantity <= 5">{{ item.StockQuantity }}</td>
+                  <td>
+                    <span class="badge" 
+                          [class.bg-danger]="item.StockQuantity === 0"
+                          [class.bg-warning]="item.StockQuantity > 0 && item.StockQuantity <= 5"
+                          [class.bg-success]="item.StockQuantity > 5">
+                      {{ item.StockStatus || 'Bình thường' }}
+                    </span>
+                  </td>
+                </tr>
+                <tr *ngIf="inventoryReport.length === 0">
+                  <td colspan="6" class="text-center text-muted">Chưa có dữ liệu</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Low Stock Alert -->
+    <div *ngIf="activeTab === 'stock'">
+      <div class="card bg-dark border-secondary border-warning">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle mb-0">
+              <thead>
+                <tr class="border-secondary">
+                  <th>Mã SP</th>
+                  <th>Tên SP</th>
+                  <th>Tồn Kho</th>
+                  <th>Kho Chứa</th>
+                  <th>Thông Tin NCC</th>
+                  <th>Tình Trạng</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of lowStock">
+                  <td>{{ item.ProductId }}</td>
+                  <td>{{ item.ProductName }}</td>
+                  <td class="fw-bold fs-5 text-warning">{{ item.StockQuantity }}</td>
+                  <td>{{ item.WarehouseName || '-' }}</td>
+                  <td>
+                    <div>{{ item.SupplierName || '-' }}</div>
+                    <div class="small text-muted"><i class="bi bi-telephone-fill me-1"></i>{{ item.SupplierPhone || '-' }}</div>
+                  </td>
+                  <td><span class="badge bg-warning text-dark">{{ item.ProductStatus }}</span></td>
+                </tr>
+                <tr *ngIf="lowStock.length === 0">
+                  <td colspan="6" class="text-center text-muted">Hiện không có mặt hàng nào sắp hết (Tất cả đều > 10)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- End Tab Content -->
+</div>
