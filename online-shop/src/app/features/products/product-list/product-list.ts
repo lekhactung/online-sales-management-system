@@ -40,18 +40,51 @@ export class ProductListComponent implements OnInit {
     });
   }
 
+  minPrice: number | null = null;
+  maxPrice: number | null = null;
+  sortOrder: string = '';
+
   onSearch(): void {
-    if (!this.keyword.trim()) {
-      this.filteredProducts = this.products;
-      return;
-    }
-    this.productService.search(this.keyword).subscribe({
-      next: (data) => {
-        this.filteredProducts = data;
-      },
-      error: () => { this.filteredProducts = []; }
-    });
+    this.applyFilters();
   }
+
+  applyFilters(): void {
+    let result = [...this.products]; // Tránh làm thay đổi thứ tự mảng gốc
+
+    // 1. Lọc theo từ khóa (Keyword)
+    if (this.keyword.trim()) {
+      const lowerKeyword = this.keyword.toLowerCase();
+      result = result.filter(p => 
+        p.ProductName.toLowerCase().includes(lowerKeyword) || 
+        p.ProductId.toLowerCase().includes(lowerKeyword) ||
+        (p.CategoryName && p.CategoryName.toLowerCase().includes(lowerKeyword))
+      );
+    }
+
+    // 2. Lọc theo khoảng giá
+    if (this.minPrice !== null && this.minPrice >= 0) {
+      result = result.filter(p => p.Price >= this.minPrice!);
+    }
+    if (this.maxPrice !== null && this.maxPrice >= 0) {
+      result = result.filter(p => p.Price <= this.maxPrice!);
+    }
+
+    // 3. Sắp xếp
+    if (this.sortOrder === 'price_asc') {
+      result = result.sort((a, b) => a.Price - b.Price);
+    } else if (this.sortOrder === 'price_desc') {
+      result = result.sort((a, b) => b.Price - a.Price);
+    } else if (this.sortOrder === 'name_asc') {
+      result = result.sort((a, b) => a.ProductName.localeCompare(b.ProductName));
+    } else if (this.sortOrder === 'stock_desc') {
+      result = result.sort((a, b) => b.StockQuantity - a.StockQuantity);
+    } else if (this.sortOrder === 'stock_asc') {
+      result = result.sort((a, b) => a.StockQuantity - b.StockQuantity);
+    }
+
+    this.filteredProducts = [...result];
+  }
+
 
   delete(id: string): void {
     if (!confirm('Xác nhận xoá sản phẩm này?')) return;

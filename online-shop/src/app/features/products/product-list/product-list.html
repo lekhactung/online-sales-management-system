@@ -6,15 +6,55 @@
     <a routerLink="/products/create" class="btn btn-info fw-bold px-3">+ THÊM MỚI</a>
   </div>
 
-  <!-- Search bar -->
-  <div class="input-group mb-4" style="max-width: 420px">
-    <span class="input-group-text bg-secondary border-0 text-white">
-      <i class="bi bi-search"></i>
-    </span>
-    <input type="text" class="form-control bg-dark text-white border-0 py-2"
-           placeholder="Tìm kiếm sản phẩm..."
-           [(ngModel)]="keyword" (keyup.enter)="onSearch()">
-    <button class="btn btn-outline-secondary" (click)="onSearch()">Tìm</button>
+  <!-- Filter bar -->
+  <div class="row g-3 mb-4 align-items-end" style="max-width: 900px;">
+    <!-- Keyword Search -->
+    <div class="col-md-4">
+      <label class="form-label text-secondary small mb-1">Tìm kiếm</label>
+      <div class="input-group">
+        <span class="input-group-text bg-secondary border-0 text-white">
+          <i class="bi bi-search"></i>
+        </span>
+        <input type="text" class="form-control bg-dark text-white border-0 py-2"
+               placeholder="Tên, ID, Danh mục..."
+               [(ngModel)]="keyword" (keyup)="onSearch()">
+      </div>
+    </div>
+    
+    <!-- Min Price -->
+    <div class="col-md-2">
+      <label class="form-label text-secondary small mb-1">Giá từ</label>
+      <input type="number" class="form-control bg-dark text-white border-0 py-2"
+             placeholder="VNĐ" [(ngModel)]="minPrice" (ngModelChange)="onSearch()">
+    </div>
+
+    <!-- Max Price -->
+    <div class="col-md-2">
+      <label class="form-label text-secondary small mb-1">Đến giá</label>
+      <input type="number" class="form-control bg-dark text-white border-0 py-2"
+             placeholder="VNĐ" [(ngModel)]="maxPrice" (ngModelChange)="onSearch()">
+    </div>
+
+    <!-- Sort Dropdown -->
+    <div class="col-md-3">
+      <label class="form-label text-secondary small mb-1">Sắp xếp theo</label>
+      <select class="form-select bg-dark text-white border-0 py-2" 
+              [(ngModel)]="sortOrder" (ngModelChange)="onSearch()">
+        <option value="">-- Mặc định --</option>
+        <option value="price_asc">Giá: Thấp đến Cao</option>
+        <option value="price_desc">Giá: Cao đến Thấp</option>
+        <option value="name_asc">Tên: A-Z</option>
+        <option value="stock_desc">Tồn kho: Nhiều nhất</option>
+        <option value="stock_asc">Tồn kho: Ít nhất</option>
+      </select>
+    </div>
+    
+    <!-- Search Button (optional, since it auto filters on keyup/change, but good to have) -->
+    <div class="col-md-1">
+      <button class="btn btn-info w-100 py-2 fw-bold" (click)="onSearch()">
+        <i class="bi bi-funnel-fill"></i>
+      </button>
+    </div>
   </div>
 
   <!-- Loading -->
