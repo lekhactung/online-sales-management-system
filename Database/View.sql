@@ -40,12 +40,14 @@ go
 create or alter view viewProductCategoryRevenue
 as
 select pc.CategoryID, pc.CategoryName,
-	count(od.ProductID) as TotalProductsSold,
-	sum(od.Quantity) as TotalQuantity,
-	sum(od.Quantity * od.UnitPrice) as TotalRevenue
+	COUNT(CASE WHEN os.StatusName != N'Đã hủy' THEN od.ProductID END) as TotalProductsSold,
+	ISNULL(SUM(CASE WHEN os.StatusName != N'Đã hủy' THEN od.Quantity ELSE 0 END), 0) as TotalQuantity,
+	ISNULL(SUM(CASE WHEN os.StatusName != N'Đã hủy' THEN (od.Quantity * od.UnitPrice) ELSE 0 END), 0) as TotalRevenue
 from ProductCategory pc
 left join Product p on pc.CategoryID = p.CategoryID
 left join OrderDetail od on od.ProductID = p.ProductID
+left join Orders o on od.OrderID = o.OrderID
+left join OrderStatus os on o.StatusID = os.StatusID
 group by pc.CategoryID, pc.CategoryName
 go
 
