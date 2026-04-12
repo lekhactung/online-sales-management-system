@@ -50,9 +50,11 @@ namespace BLL.Services
                 });
             }
 
+            string newId = await _orderRepository.GenerateNextIdAsync("DH", o => o.OrderId);
+
             var order = new Order
             {
-                OrderId = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(),
+                OrderId = newId,
                 OrderDate = DateTime.Now,
                 CustomerId = createDto.CustomerId,
                 StatusId = string.IsNullOrEmpty(createDto.StatusId) ? "TT01" : createDto.StatusId,

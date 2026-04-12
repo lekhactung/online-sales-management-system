@@ -22,6 +22,9 @@ builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository
 builder.Services.AddScoped<IProductCategoryServices, ProductCategoryServices>();
 builder.Services.AddScoped<IOrderStatusServices, OrderStatusServices>();
 
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IReportServices, ReportServices>();
+
 builder.Services.AddControllers(options =>
 {
     options.RespectBrowserAcceptHeader = false;

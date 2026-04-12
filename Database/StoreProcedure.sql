@@ -1,4 +1,4 @@
-﻿use OnlineSales
+use OnlineSales
 go
 
 --====================== KHÁCH HÀNG ==========================
@@ -241,7 +241,7 @@ GO
 CREATE OR ALTER PROC spGetAllProducts
 AS
 BEGIN
-    SELECT p.ProductID, p.ProductName, p.Price, p.StockQuantity,
+    SELECT p.ProductID, p.ProductName, p.Price, p.StockQuantity, p.CategoryID,
         c.CategoryName, s.SupplierName, w.WarehouseName
     FROM Product p
     LEFT JOIN ProductCategory c ON p.CategoryID = c.CategoryID

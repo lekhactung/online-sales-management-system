@@ -46,7 +46,15 @@ import { FormsModule } from '@angular/forms';
               <i class="bi bi-people-fill me-2"></i> Khách hàng
             </a>
           </li>
+          <li class="nav-item">
+            <a routerLink="/reports"
+               routerLinkActive="bg-info text-dark fw-bold"
+               class="nav-link text-white">
+              <i class="bi bi-graph-up me-2"></i> Báo cáo
+            </a>
+          </li>
         </ul>
+
 
         <!-- User section -->
         <div class="mt-auto border-top border-secondary pt-3">

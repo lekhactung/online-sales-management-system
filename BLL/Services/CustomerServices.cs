@@ -67,9 +67,11 @@ namespace BLL.Services
                     if (all.Any(c => c.Email == email)) throw new Exception("Email này đã được sử dụng.");
                 }
 
+                string newId = await _customerRepository.GenerateNextIdAsync("KH", c => c.CustomerId);
+
                 var customer = new Customer
                 {
-                    CustomerId = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(),
+                    CustomerId = newId,
                     LastName = createDto.LastName,
                     FirstName = createDto.FirstName,
                     Phone = phone,

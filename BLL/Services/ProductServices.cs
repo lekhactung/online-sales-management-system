@@ -42,9 +42,11 @@ namespace BLL.Services
             if (dto.Price <= 0)
                 throw new ArgumentException("Giá phải lớn hơn 0");
 
+            string newId = await _repo.GenerateNextIdAsync("SP", p => p.ProductId);
+
             var entity = new Product
             {
-                ProductId = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(),
+                ProductId = newId,
                 ProductName = dto.ProductName,
                 Price = dto.Price,
                 CategoryId = dto.CategoryId,

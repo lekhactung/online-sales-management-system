@@ -1,4 +1,4 @@
-﻿use OnlineSales
+use OnlineSales
 go
 
 -- Tự động trừ tồn kho khi bán hàng

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,6 +12,7 @@ namespace DAL.Repositories
         Task<T> CreateAsync(T entity);
         Task<T> UpdateAsync(T entity);
         Task<bool> DeleteAsync(string id);
+        Task<string> GenerateNextIdAsync(string prefix, System.Linq.Expressions.Expression<Func<T, string>> idSelector);
 
     }
 }

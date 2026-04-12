@@ -61,5 +61,12 @@ namespace DAL.Repositories
                 return false;
             }
         }
+
+        public async Task<string> GenerateNextIdAsync(string prefix, System.Linq.Expressions.Expression<Func<T, string>> idSelector)
+        {
+            var ids = await _dbSet.Select(idSelector).Where(id => id.StartsWith(prefix)).ToListAsync();
+            var maxNumber = ids.Select(id => int.TryParse(id.Substring(prefix.Length), out int n) ? n : 0).DefaultIfEmpty(0).Max();
+            return $"{prefix}{maxNumber + 1}";
+        }
     }
 }

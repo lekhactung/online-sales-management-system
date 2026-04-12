@@ -12,6 +12,7 @@ namespace Model.DTOs
         public string CategoryId { get; set; } = string.Empty;
         public string? CategoryName { get; set; }
         public string? SupplierName { get; set; }
+        public string? WarehouseName { get; set; }
         public int StockQuantity { get; set; }
     }
 

@@ -1,4 +1,4 @@
-﻿use OnlineSales
+use OnlineSales
 go
 
 -- View xem thông tin đơn hàng
@@ -100,7 +100,7 @@ select * from viewShippingStatusSummary
 go
 
 -- Chi tiết trạng thái kho và nhà cung cấp
-create view viewInventoryReport
+create or alter view viewInventoryReport
 as
 select
 	p.ProductID, 
