@@ -1,0 +1,237 @@
+            migrationBuilder.Sql(@"
+-- Tính tổng tiền sau thuế (VAT)
+create or alter function funcCalculateTotalWithVAT(
+	@Amount DECIMAL(18, 2),
+	@VAT int
+) returns decimal(18, 2)
+as
+begin
+	return @Amount *(1 + @VAT / 100.0)
+end
+");
+
+            migrationBuilder.Sql(@"
+-- Kiểm tra hàng tồn kho
+create function funcGetProductStatus (
+	@productID nvarchar(20)
+) returns nvarchar(100)
+as
+begin
+	declare @quantity int
+	declare @status nvarchar(100)
+
+	select @quantity = StockQuantity from Product where @productID = ProductID
+
+	if @quantity > 10
+		set @status = N'Còn hàng'
+	else if @quantity > 0
+		set @status = N'Sắp hết hàng'
+	else
+		set @status = N'Hết hàng'
+
+		return @status
+end
+");
+
+            migrationBuilder.Sql(@"
+-- Lấy danh đơn hàng của một khách hàng
+create function funcGetOrdersByCustomer(
+	@customerID nvarchar(20)
+) returns table
+as
+return (
+	select
+		o.OrderID, o.OrderDate, o.TotalAmount,
+		os.StatusName
+	from Orders o
+	inner join OrderStatus os on o.StatusID = os.StatusID
+	where o.CustomerID = @customerID
+)
+");
+
+            migrationBuilder.Sql(@"
+-- Tìm kiếm sản phẩm theo khoảng giá
+create function funcSearchProductByPrice(
+	@minPrice DECIMAL(18,2),
+	@maxPrice DECIMAL(18,2)
+) returns table
+as
+return(
+	select ProductID, ProductName, Price, StockQuantity
+	from Product
+	where Price between @minPrice and @maxPrice
+)
+");
+
+            migrationBuilder.Sql(@"
+-- Tự động trừ tồn kho khi bán hàng
+create or alter trigger trgAfterInsertOrderDetail
+on OrderDetail
+after insert
+as
+begin
+	set NOCOUNT on;
+
+	UPDATE Product
+	set StockQuantity = Product.StockQuantity - i.Quantity
+	from Product
+	inner join inserted i on Product.ProductID = i.ProductID;
+
+	if exists (select 1 from Product where StockQuantity < 0)
+	BEGIN
+        RAISERROR(N'Lỗi: Số lượng hàng trong kho không đủ để bán!', 16, 1);
+        ROLLBACK TRANSACTION;
+    END
+end
+");
+
+            migrationBuilder.Sql(@"
+-- Hoàn hàng tồn kho khi xóa chi tiết đơn hàng
+create or alter trigger trgAfterDeleteOrderDetail
+on OrderDetail
+after DELETE
+as
+begin
+	UPDATE Product
+	set StockQuantity = Product.StockQuantity + d.Quantity
+	from Product
+	inner join deleted d on Product.ProductID = d.ProductID
+end
+");
+
+            migrationBuilder.Sql(@"
+-- Tính tổng tiền
+create or alter trigger trgUpdateTotalAmount
+on OrderDetail
+after INSERT, UPDATE, DELETE
+as
+begin
+	DECLARE @AffectedOrders TABLE (OrderID nvarchar(20))
+
+	insert into @AffectedOrders 
+	select OrderID from inserted 
+	union 
+	select OrderID from deleted;
+
+	update Orders
+	set TotalAmount = (
+		select SUM(Quantity * UnitPrice)
+		from OrderDetail
+		where OrderDetail.OrderID = Orders.OrderID
+	)
+	where OrderID in (select OrderID from @AffectedOrders)
+
+	update Orders set TotalAmount = 0 where TotalAmount is null
+end
+");
+
+            migrationBuilder.Sql(@"
+-- View xem thông tin đơn hàng
+create or alter view viewOrderInformation
+as
+SELECT
+	o.OrderID, o.OrderDate,
+	c.LastName + ' ' + c.FirstName as CustomerName,
+	p.ProductName,
+	od.Quantity,
+	od.UnitPrice,
+	(od.Quantity * od.UnitPrice) as SubTotal,
+	os.StatusName
+FROM Orders o
+inner join Customer c on o.CustomerID = c.CustomerID
+inner join OrderDetail od on o.OrderID = od.OrderID
+inner join Product p on od.ProductID = p.ProductID
+inner join OrderStatus os on o.StatusID = os.StatusID
+");
+
+            migrationBuilder.Sql(@"
+-- View Thống kê doanh thu theo sản phẩm
+create or alter view viewProductRevenue
+as
+select p.ProductID, p.ProductName,
+	sum(od.Quantity) as TotalSold,
+	sum(od.Quantity * od.UnitPrice) as TotalRevenue
+from Product p
+inner join OrderDetail od on od.ProductID = p.ProductID
+group by p.ProductID, p.ProductName
+");
+
+            migrationBuilder.Sql(@"
+-- View thống kê doanh thu theo loại sản phẩm
+create or alter view viewProductCategoryRevenue
+as
+select pc.CategoryID, pc.CategoryName,
+	COUNT(CASE WHEN os.StatusName != N'Đã hủy' THEN od.ProductID END) as TotalProductsSold,
+	ISNULL(SUM(CASE WHEN os.StatusName != N'Đã hủy' THEN od.Quantity ELSE 0 END), 0) as TotalQuantity,
+	ISNULL(SUM(CASE WHEN os.StatusName != N'Đã hủy' THEN (od.Quantity * od.UnitPrice) ELSE 0 END), 0) as TotalRevenue
+from ProductCategory pc
+left join Product p on pc.CategoryID = p.CategoryID
+left join OrderDetail od on od.ProductID = p.ProductID
+left join Orders o on od.OrderID = o.OrderID
+left join OrderStatus os on o.StatusID = os.StatusID
+group by pc.CategoryID, pc.CategoryName
+");
+
+            migrationBuilder.Sql(@"
+-- View báo cáo doanh số theo tháng
+create view viewMonthlySalesReport
+as
+select
+	YEAR(OrderDate) as SalesYear,
+	MONTH(OrderDate) as SalesMonth,
+	COUNT(OrderID) as TotalOrders,
+	SUM(TotalAmount) as MonthlyRevenue
+from Orders
+group by YEAR(OrderDate), MONTH(OrderDate)
+");
+
+            migrationBuilder.Sql(@"
+-- View lọc danh sách hàng sắp hết < 10 sản phẩm
+create or alter view viewLowStockQuantityAlert
+as
+select
+	p.ProductID, p.ProductName, p.StockQuantity,
+	wh.WarehouseName,
+	sp.SupplierName, sp.Phone as SupplierPhone,
+	dbo.funcGetProductStatus(p.ProductID) as ProductStatus
+from Product p
+inner join Warehouse wh on p.WarehouseID = wh.WarehouseID
+inner join Supplier sp on sp.SupplierID = p.SupplierID
+");
+
+            migrationBuilder.Sql(@"
+-- View xem tình trạng giao hàng
+create or alter view viewShippingStatusSummary
+as
+select o.OrderID, o.OrderDate,
+	os.StatusName,
+	sh.ShippingCompany, sh.EstimatedDeliveryDate, sh.ShippingFee,
+	c.LastName + ' ' + C.FirstName as CustomerName
+from Orders o
+inner join OrderStatus os on o.StatusID = os.StatusID
+left join Shipping sh on o.OrderID = sh.OrderID
+inner join Customer c on c.CustomerID = o.CustomerID;
+");
+
+            migrationBuilder.Sql(@"
+-- Chi tiết trạng thái kho và nhà cung cấp
+create or alter view viewInventoryReport
+as
+select
+	p.ProductID, 
+    p.ProductName, 
+    p.StockQuantity,
+    c.CategoryName,
+    s.SupplierName,
+    w.WarehouseName,
+	CASE 
+        WHEN p.StockQuantity = 0 THEN N'Hết hàng'
+        WHEN p.StockQuantity <= 5 THEN N'Cần nhập gấp'
+        ELSE N'Bình thường'
+    END AS StockStatus
+from Product p
+LEFT JOIN ProductCategory c ON p.CategoryID = c.CategoryID
+LEFT JOIN Supplier s ON p.SupplierID = s.SupplierID
+LEFT JOIN Warehouse w ON p.WarehouseID = w.WarehouseID
+");
+

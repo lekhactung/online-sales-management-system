@@ -3,10 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Model.DTOs;
 using System.Threading.Tasks;
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "ProductAdmin,SuperAdmin")]
     public class ProductCategoryController : ControllerBase
     {
         private readonly IProductCategoryServices _service;

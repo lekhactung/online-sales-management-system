@@ -3,6 +3,7 @@ import { NgFor, NgIf, DecimalPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../core/services/product';
+import { ProductCategoryService } from '../../../core/services/product-category';
 import { Product } from '../../../shared/models/product.model';
 
 @Component({
@@ -18,7 +19,16 @@ export class ProductListComponent implements OnInit {
   isLoading = true;
   error = '';
 
-  constructor(private productService: ProductService) {}
+  showCatModal = false;
+  newCategoryName = '';
+  isAddingCat = false;
+  catError = '';
+  catSuccess = '';
+
+  constructor(
+    private productService: ProductService,
+    private categoryService: ProductCategoryService
+  ) {}
 
   ngOnInit(): void {
     this.loadProducts();
@@ -36,6 +46,35 @@ export class ProductListComponent implements OnInit {
       error: () => {
         this.error = 'Lỗi kết nối API. Đảm bảo backend đang chạy!';
         this.isLoading = false;
+      }
+    });
+  }
+
+  toggleCategoryModal(): void {
+    this.showCatModal = !this.showCatModal;
+    this.newCategoryName = '';
+    this.catError = '';
+    this.catSuccess = '';
+  }
+
+  quickAddCategory(): void {
+    if (!this.newCategoryName.trim()) return;
+    this.isAddingCat = true;
+    this.catError = '';
+    this.catSuccess = '';
+
+    this.categoryService.create({ 
+      CategoryName: this.newCategoryName.trim()
+    }).subscribe({
+      next: (res: any) => {
+        this.isAddingCat = false;
+        this.catSuccess = `Đã thêm danh mục "${this.newCategoryName.trim()}" thành công!`;
+        this.newCategoryName = '';
+        setTimeout(() => { if(this.showCatModal) this.toggleCategoryModal() }, 2000);
+      },
+      error: (err) => {
+        this.isAddingCat = false;
+        this.catError = err?.error?.message || 'Có lỗi xảy ra khi lưu danh mục.';
       }
     });
   }

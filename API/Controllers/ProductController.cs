@@ -3,10 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using BLL.Services;
 using Model.DTOs;
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "ProductAdmin,SuperAdmin")]
     public class ProductController : ControllerBase
     {
         private readonly IProductServices _service;

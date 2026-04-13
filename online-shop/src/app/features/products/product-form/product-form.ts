@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NgIf, NgFor } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductService } from '../../../core/services/product';
 import { ProductCategoryService } from '../../../core/services/product-category';
@@ -9,7 +9,7 @@ import { ProductCategory } from '../../../shared/models/product-category.model';
 @Component({
   selector: 'app-product-form',
   standalone: true,
-  imports: [NgIf, NgFor, ReactiveFormsModule, RouterLink],
+  imports: [NgIf, NgFor, NgClass, ReactiveFormsModule, FormsModule, RouterLink],
   templateUrl: './product-form.html'
 })
 export class ProductFormComponent implements OnInit {
@@ -20,6 +20,11 @@ export class ProductFormComponent implements OnInit {
   isSaving = false;
   error = '';
   categories: ProductCategory[] = [];
+
+  showCategoryForm = false;
+  newCategoryName = '';
+  isAddingCategory = false;
+  categoryError = '';
 
   constructor(
     private fb: FormBuilder,
@@ -37,10 +42,7 @@ export class ProductFormComponent implements OnInit {
       StockQuantity: [0,  [Validators.required, Validators.min(0)]],
     });
 
-    this.categoryService.getAll().subscribe({
-      next: (cats) => { this.categories = cats; },
-      error: () => { this.error = 'Không tải được danh mục sản phẩm'; }
-    });
+    this.loadCategories();
 
     this.productId = this.route.snapshot.params['id'];
     if (this.productId) {
@@ -57,6 +59,42 @@ export class ProductFormComponent implements OnInit {
         }
       });
     }
+  }
+
+  loadCategories() {
+    this.categoryService.getAll().subscribe({
+      next: (cats) => { this.categories = cats; },
+      error: () => { this.error = 'Không tải được danh mục sản phẩm'; }
+    });
+  }
+
+  toggleCategoryForm() {
+    this.showCategoryForm = !this.showCategoryForm;
+    this.newCategoryName = '';
+    this.categoryError = '';
+  }
+
+  addCategory() {
+    if (!this.newCategoryName.trim()) return;
+    this.isAddingCategory = true;
+    this.categoryError = '';
+
+    this.categoryService.create({ 
+      CategoryName: this.newCategoryName.trim()
+    }).subscribe({
+      next: (res: any) => {
+        this.isAddingCategory = false;
+        this.showCategoryForm = false;
+        this.categoryService.getAll().subscribe(cats => {
+          this.categories = cats;
+          this.form.patchValue({ CategoryId: res.CreatedId || res.createdId });
+        });
+      },
+      error: (err) => {
+        this.isAddingCategory = false;
+        this.categoryError = err?.error?.message || 'Lỗi lưu danh mục';
+      }
+    });
   }
 
   submit(): void {

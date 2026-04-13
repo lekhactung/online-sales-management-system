@@ -21,6 +21,7 @@ namespace DAL.Data
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
         public DbSet<OrderStatus> OrderStatuses { get; set; }
+        public DbSet<AdminAccount> AdminAccounts { get; set; }
 
         // Views (Keyless)
         public DbSet<OrderInformationDto> ViewOrderInformation { get; set; }
@@ -78,6 +79,22 @@ namespace DAL.Data
             // SP / Function result DTOs — Keyless (dùng với FromSqlRaw)
             modelBuilder.Entity<ProductDto>().HasNoKey();
             modelBuilder.Entity<ProductPriceRangeDto>().HasNoKey();
+
+            // Seed Admins
+            modelBuilder.Entity<AdminAccount>().HasData(
+                new AdminAccount { AdminId = 1, Username = "superadmin", PasswordHash = "123456", FullName = "Super Administrator", Role = "SuperAdmin" },
+                new AdminAccount { AdminId = 2, Username = "productadmin", PasswordHash = "123456", FullName = "Product Manager", Role = "ProductAdmin" },
+                new AdminAccount { AdminId = 3, Username = "orderadmin", PasswordHash = "123456", FullName = "Order Manager", Role = "OrderAdmin" },
+                new AdminAccount { AdminId = 4, Username = "customeradmin", PasswordHash = "123456", FullName = "Customer Care", Role = "CustomerAdmin" }
+            );
+            // Seed OrderStatus
+            modelBuilder.Entity<OrderStatus>().HasData(
+                new OrderStatus { StatusId = "TT01", StatusName = "Chờ xác nhận" },
+                new OrderStatus { StatusId = "TT02", StatusName = "Đang chuẩn bị hàng" },
+                new OrderStatus { StatusId = "TT03", StatusName = "Đang giao hàng" },
+                new OrderStatus { StatusId = "TT04", StatusName = "Đã giao" },
+                new OrderStatus { StatusId = "TT05", StatusName = "Đã hủy" }
+            );
         }
     }
 }

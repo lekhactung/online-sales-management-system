@@ -165,3 +165,4 @@ D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\api\bin\Debug\net10.0\
 D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\API\obj\Debug\net10.0\API.csproj.Up2Date
 D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\API\obj\Debug\net10.0\API.genruntimeconfig.cache
 D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\API\obj\Debug\net10.0\ref\API.dll
+D:\LE TUNG\CS02\HK8\LTCSDL\online-sales-management-system\API\bin\Debug\net10.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

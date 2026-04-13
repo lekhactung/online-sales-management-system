@@ -91,5 +91,28 @@ namespace OnlineShop.DAL.Repositories
             _context.OrderDetails.RemoveRange(details);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> UpdateOrderWithDetailsAsync(Order order, IEnumerable<OrderDetail> newDetails)
+        {
+            try
+            {
+                // Unlink old details from order navigation so Update doesn't track them
+                order.OrderDetails = null;
+                
+                // Track order as modified (this won't reach details now)
+                _context.Orders.Update(order);
+                
+                // Track new details as Added
+                await _context.OrderDetails.AddRangeAsync(newDetails);
+                
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (System.Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
     }
 }

@@ -4,10 +4,13 @@ using Model.DTOs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "CustomerAdmin,SuperAdmin")]
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerServices _service;

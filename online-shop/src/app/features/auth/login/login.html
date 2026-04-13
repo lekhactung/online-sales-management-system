@@ -1,0 +1,56 @@
+<div class="login-wrapper">
+  <div class="glass-panel">
+    <div class="login-header">
+      <div class="logo">
+        <i class="fas fa-chart-line"></i>
+      </div>
+      <h2>Sales System</h2>
+      <p>Welcome back! Please login to your account.</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      
+      <div class="input-group">
+        <label for="username">Username</label>
+        <div class="input-container">
+          <i class="fas fa-user icon"></i>
+          <input type="text" id="username" formControlName="username" placeholder="Enter your username" autocomplete="off" />
+        </div>
+        <div *ngIf="loginForm.get('username')?.touched && loginForm.get('username')?.invalid" class="error-msg">
+          Username is required.
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="password">Password</label>
+        <div class="input-container">
+          <i class="fas fa-lock icon"></i>
+          <input type="password" id="password" formControlName="password" placeholder="Enter your password" />
+        </div>
+        <div *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid" class="error-msg">
+          Password is required.
+        </div>
+      </div>
+
+      <div *ngIf="errorMsg" class="alert-error">
+        {{ errorMsg }}
+      </div>
+
+      <button type="submit" [disabled]="loginForm.invalid || isLoading" class="btn-login">
+        <span *ngIf="!isLoading">Sign In</span>
+        <div *ngIf="isLoading" class="spinner"></div>
+      </button>
+
+      <div class="login-footer">
+        <p>Protected by SuperAdmin System</p>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="background-elements">
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+    <div class="circle circle-3"></div>
+  </div>
+</div>

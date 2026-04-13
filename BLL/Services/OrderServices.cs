@@ -51,6 +51,11 @@ namespace BLL.Services
             }
 
             string newId = await _orderRepository.GenerateNextIdAsync("DH", o => o.OrderId);
+            
+            foreach (var od in orderDetails)
+            {
+                od.OrderId = newId;
+            }
 
             var order = new Order
             {
@@ -58,7 +63,7 @@ namespace BLL.Services
                 OrderDate = DateTime.Now,
                 CustomerId = createDto.CustomerId,
                 StatusId = string.IsNullOrEmpty(createDto.StatusId) ? "TT01" : createDto.StatusId,
-                TotalAmount = 0,
+                TotalAmount = orderDetails.Sum(d => d.Quantity * d.UnitPrice),
                 OrderDetails = orderDetails
             };
 
@@ -114,10 +119,10 @@ namespace BLL.Services
                 });
             }
 
-            order.OrderDetails = newDetails;
+            order.TotalAmount = newDetails.Sum(d => d.Quantity * d.UnitPrice);
 
-            var updated = await _orderRepository.UpdateAsync(order);
-            return updated != null;
+            var updated = await _orderRepository.UpdateOrderWithDetailsAsync(order, newDetails);
+            return updated;
         }
 
         public async Task<bool> DeleteOrderAsync(string id)

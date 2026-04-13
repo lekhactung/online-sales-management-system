@@ -2,6 +2,9 @@ using BLL.Services;
 using DAL.Data;
 using DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using OnlineShop.DAL.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +28,30 @@ builder.Services.AddScoped<IOrderStatusServices, OrderStatusServices>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IReportServices, ReportServices>();
 
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<IAdminServices, AdminServices>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"] ?? "super_secret_key_12345678901234567890");
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
+
+
 builder.Services.AddControllers(options =>
 {
     options.RespectBrowserAcceptHeader = false;
@@ -47,6 +74,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -56,6 +84,7 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 app.UseCors("AllowAngular");
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

@@ -3,10 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Model.DTOs;
 using System.Threading.Tasks;
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "SuperAdmin")]
     public class ReportController : ControllerBase
     {
         private readonly IReportServices _service;
