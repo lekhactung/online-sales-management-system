@@ -1,11 +1,8 @@
-*.vs/
-*.json
-*.App
-.http
-Database/
-*.cache
-*/obj
 */bin
+*/obj
+/obj
+/bin
+obj/
 # Visual Studio
 .vs/
 bin/
