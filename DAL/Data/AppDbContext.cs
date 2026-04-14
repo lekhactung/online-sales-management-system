@@ -80,12 +80,12 @@ namespace DAL.Data
             modelBuilder.Entity<ProductDto>().HasNoKey();
             modelBuilder.Entity<ProductPriceRangeDto>().HasNoKey();
 
-            // Seed Admins
+            // Seed Admins securely using BCrypt hashes
             modelBuilder.Entity<AdminAccount>().HasData(
-                new AdminAccount { AdminId = 1, Username = "superadmin", PasswordHash = "123456", FullName = "Super Administrator", Role = "SuperAdmin" },
-                new AdminAccount { AdminId = 2, Username = "productadmin", PasswordHash = "123456", FullName = "Product Manager", Role = "ProductAdmin" },
-                new AdminAccount { AdminId = 3, Username = "orderadmin", PasswordHash = "123456", FullName = "Order Manager", Role = "OrderAdmin" },
-                new AdminAccount { AdminId = 4, Username = "customeradmin", PasswordHash = "123456", FullName = "Customer Care", Role = "CustomerAdmin" }
+                new AdminAccount { AdminId = 1, Username = "superadmin", PasswordHash = "$2b$10$BsLfKnfnrXX70kD1DAIQKuCdvxfjO5Ij75bmE9fNmgNrxK8T5/xYm", FullName = "Super Administrator", Role = "SuperAdmin" },
+                new AdminAccount { AdminId = 2, Username = "productadmin", PasswordHash = "$2b$10$BsLfKnfnrXX70kD1DAIQKuCdvxfjO5Ij75bmE9fNmgNrxK8T5/xYm", FullName = "Product Manager", Role = "ProductAdmin" },
+                new AdminAccount { AdminId = 3, Username = "orderadmin", PasswordHash = "$2b$10$BsLfKnfnrXX70kD1DAIQKuCdvxfjO5Ij75bmE9fNmgNrxK8T5/xYm", FullName = "Order Manager", Role = "OrderAdmin" },
+                new AdminAccount { AdminId = 4, Username = "customeradmin", PasswordHash = "$2b$10$BsLfKnfnrXX70kD1DAIQKuCdvxfjO5Ij75bmE9fNmgNrxK8T5/xYm", FullName = "Customer Care", Role = "CustomerAdmin" }
             );
             // Seed OrderStatus
             modelBuilder.Entity<OrderStatus>().HasData(

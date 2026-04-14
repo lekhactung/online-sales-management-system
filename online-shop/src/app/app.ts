@@ -70,7 +70,7 @@ import { AuthService } from './core/services/auth.service';
             <div class="d-flex align-items-center gap-2 px-2 text-white">
               <div class="bg-info rounded-circle d-flex align-items-center justify-content-center text-dark fw-bold"
                    style="width:32px;height:32px;">
-                {{ (userName?.charAt(0) || 'A').toUpperCase() }}
+                {{ (userName.charAt(0) || 'A').toUpperCase() }}
               </div>
               <div class="d-flex flex-column">
                   <span class="small fw-bold text-truncate lh-1">{{ fullName || userName }}</span>

@@ -26,13 +26,17 @@ namespace BLL.Services
         {
             var admin = await _adminRepository.GetByUsernameAsync(loginDto.Username);
 
-            if (admin == null || admin.PasswordHash != loginDto.Password)
+            if (admin == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, admin.PasswordHash))
             {
                 return null;
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var keyString = _configuration["Jwt:Key"] ?? "super_secret_key_12345678901234567890";
+            var keyString = _configuration["Jwt:Key"];
+            if (string.IsNullOrEmpty(keyString))
+            {
+                throw new InvalidOperationException("JWT Secret Key is not configured properly in appsettings.");
+            }
             var key = Encoding.ASCII.GetBytes(keyString);
 
             var claims = new List<Claim>
