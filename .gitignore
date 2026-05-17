@@ -26,3 +26,7 @@ package-lock.json
 *.tex
 *.pdf
 .txt
+
+# Excluded folders
+assets/
+Database/
