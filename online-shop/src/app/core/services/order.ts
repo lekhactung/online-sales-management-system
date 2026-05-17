@@ -7,7 +7,7 @@ import { Order, CreateOrder, UpdateOrder } from '../../shared/models/order.model
 export class OrderService {
   private endpoint = 'order';
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService) { }
 
   getAll(): Observable<Order[]> {
     return this.api.get<Order[]>(this.endpoint);
@@ -17,8 +17,8 @@ export class OrderService {
     return this.api.get<Order>(`${this.endpoint}/${id}`);
   }
 
-  create(dto: CreateOrder): Observable<{OrderId: string}> {
-    return this.api.post<{OrderId: string}>(this.endpoint, dto);
+  create(dto: CreateOrder): Observable<{ OrderId: string }> {
+    return this.api.post<{ OrderId: string }>(this.endpoint, dto);
   }
 
   update(id: string, dto: UpdateOrder): Observable<void> {
