@@ -30,20 +30,20 @@ Hệ thống cung cấp cho đội ngũ quản lý và nhân viên vận hành m
 
 ---
 
-## ✨ Tính năng chính
+## Tính năng chính
 
 | Module | Chức năng |
 |---|---|
-| 🔐 **Xác thực & Phân quyền** | Đăng nhập JWT, phân quyền theo 4 Role riêng biệt |
-| 📦 **Quản lý Sản phẩm** | CRUD sản phẩm & danh mục, theo dõi tồn kho thời gian thực |
-| 👥 **Quản lý Khách hàng** | CRUD khách hàng, tìm kiếm theo tên / số điện thoại |
-| 📋 **Quản lý Đơn hàng** | Tạo đơn, kiểm tra tồn kho 2 lớp, cập nhật trạng thái giao hàng |
-| 📊 **Báo cáo & Thống kê** | Doanh thu theo sản phẩm / danh mục / tháng, cảnh báo hàng sắp hết |
-| 👤 **Quản lý Tài khoản Admin** | SuperAdmin toàn quyền quản lý các tài khoản nội bộ |
+|  **Xác thực & Phân quyền** | Đăng nhập JWT, phân quyền theo 4 Role riêng biệt |
+|  **Quản lý Sản phẩm** | CRUD sản phẩm & danh mục, theo dõi tồn kho thời gian thực |
+|  **Quản lý Khách hàng** | CRUD khách hàng, tìm kiếm theo tên / số điện thoại |
+|  **Quản lý Đơn hàng** | Tạo đơn, kiểm tra tồn kho 2 lớp, cập nhật trạng thái giao hàng |
+|  **Báo cáo & Thống kê** | Doanh thu theo sản phẩm / danh mục / tháng, cảnh báo hàng sắp hết |
+|  **Quản lý Tài khoản Admin** | SuperAdmin toàn quyền quản lý các tài khoản nội bộ |
 
 ---
 
-## 🏗️ Kiến trúc hệ thống
+##  Kiến trúc hệ thống
 
 Dự án được tổ chức theo mô hình **N-Layer Architecture**, tách biệt hoàn toàn giữa giao diện, nghiệp vụ và dữ liệu:
 
@@ -75,7 +75,7 @@ ASP.NET Core API  →  BLL (Business Rules)  →  DAL (EF Core)  →  SQL Server
 
 ---
 
-## 🛠️ Công nghệ sử dụng
+##  Công nghệ sử dụng
 
 ### Frontend
 | | Công nghệ |
@@ -107,7 +107,7 @@ ASP.NET Core API  →  BLL (Business Rules)  →  DAL (EF Core)  →  SQL Server
 
 ---
 
-## 🗄️ Thiết kế Cơ sở dữ liệu
+## Thiết kế Cơ sở dữ liệu
 
 ### Các bảng chính
 
@@ -127,7 +127,7 @@ ASP.NET Core API  →  BLL (Business Rules)  →  DAL (EF Core)  →  SQL Server
 
 ---
 
-## 🔐 Phân quyền
+## Phân quyền
 
 | Tính năng | SuperAdmin | ProductAdmin | OrderAdmin | CustomerAdmin |
 |---|:---:|:---:|:---:|:---:|
@@ -139,7 +139,7 @@ ASP.NET Core API  →  BLL (Business Rules)  →  DAL (EF Core)  →  SQL Server
 
 ---
 
-## 🚀 Hướng dẫn cài đặt
+##  Hướng dẫn cài đặt
 
 ### Yêu cầu
 - [.NET 10 SDK](https://dotnet.microsoft.com/download)
@@ -201,7 +201,7 @@ ng serve
 
 ---
 
-## 👥 Nhóm thực hiện
+## Nhóm thực hiện
 
 | Họ tên | MSSV | Đóng góp |
 |---|---|---|
@@ -213,5 +213,5 @@ ng serve
 ---
 
 <div align="center">
-  <sub>📘 Đồ án môn học: Lập trình Cơ sở Dữ liệu · HK8 · 2025–2026 · Nhóm 13</sub>
+  <sub> Đồ án môn học: Lập trình Cơ sở Dữ liệu · HK8 · 2025–2026 · Nhóm 13</sub>
 </div>
